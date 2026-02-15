@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRISPR-GPT — AI Turns Gene Editing into a Conversation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #0A0A14;
+    --bg-card: rgba(245,230,211,0.03);
+    --bg-card-border: rgba(245,230,211,0.06);
+    --text-primary: #F5E6D3;
+    --text-muted: rgba(245,230,211,0.55);
+    --text-faint: rgba(245,230,211,0.35);
+    --red: #E8443A;
+    --amber: #F59E0B;
+    --green: #10B981;
+    --indigo: #6366F1;
+    --pink: #EC4899;
+    --purple: #8B5CF6;
+    --cyan: #06B6D4;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #0A0A14 0%, #0F0F1E 30%, #12101E 60%, #0A0A14 100%);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(120px);
+  }
+  body::before {
+    width: 600px; height: 600px;
+    top: -200px; left: -100px;
+    background: radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 70%);
+  }
+  body::after {
+    width: 500px; height: 500px;
+    bottom: -150px; right: -100px;
+    background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%);
+  }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* === FADE-IN === */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1);
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-in.d1 { transition-delay: 0.1s; }
+  .fade-in.d2 { transition-delay: 0.2s; }
+  .fade-in.d3 { transition-delay: 0.3s; }
+  .fade-in.d4 { transition-delay: 0.4s; }
+  .fade-in.force-visible { opacity: 1 !important; transform: translateY(0) !important; }
+
+  /* === TAG === */
+  .section-tag {
+    display: inline-block;
+    padding: 5px 18px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  /* === HEADINGS === */
+  h2.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 4.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  h2.section-title em { font-style: italic; }
+
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 620px;
+    margin-bottom: 36px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* === CARDS === */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.35s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245,230,211,0.12);
+  }
+
+  .chart-wrap {
+    background: rgba(245,230,211,0.02);
+    border: 1px solid rgba(245,230,211,0.05);
+    border-radius: 20px;
+    padding: 28px 20px 16px;
+  }
+  .chart-container { position: relative; width: 100%; }
+  .chart-container canvas { width: 100% !important; height: 100% !important; }
+
+  /* === METRIC CARDS === */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    padding: 26px 20px;
+    text-align: center;
+    transition: all 0.35s ease;
+    cursor: default;
+  }
+  .metric-card:hover { transform: translateY(-3px); }
+  .metric-value {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric-label {
+    font-size: 11px;
+    color: rgba(245,230,211,0.45);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  /* === STEP CARDS === */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+    gap: 16px;
+  }
+  .step-card {
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    padding: 28px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s ease;
+  }
+  .step-card:hover { transform: translateY(-4px); }
+  .step-number {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-family: var(--font-mono);
+    font-size: 44px;
+    font-weight: 700;
+    opacity: 0.06;
+    line-height: 1;
+  }
+  .step-icon { font-size: 34px; margin-bottom: 14px; }
+  .step-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .step-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.65; }
+
+  /* === COMPARISON TABLE === */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  @media (max-width: 600px) { .comparison-grid { grid-template-columns: 1fr; } }
+  .comparison-card {
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+  }
+  .comparison-icon { font-size: 40px; margin-bottom: 10px; }
+  .comparison-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+  .comparison-list { list-style: none; text-align: left; }
+  .comparison-list li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(245,230,211,0.04);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* === BAR LABELS === */
+  .disease-bars { display: flex; flex-direction: column; gap: 14px; }
+  .disease-row { display: flex; align-items: center; gap: 14px; }
+  .disease-name { width: 160px; font-size: 13px; font-weight: 500; flex-shrink: 0; text-align: right; }
+  @media (max-width: 480px) {
+    .disease-name { width: 90px; font-size: 11px; }
+    .bar-fill { font-size: 10px; padding-right: 6px; }
+  }
+  .bar-track { flex: 1; height: 28px; background: rgba(245,230,211,0.04); border-radius: 8px; overflow: hidden; position: relative; }
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    width: 0%;
+    transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* === TIMELINE === */
+  .timeline { position: relative; padding-left: 36px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--green), var(--cyan), var(--indigo), var(--purple), var(--pink));
+    border-radius: 2px;
+  }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-dot {
+    position: absolute;
+    left: -30px; top: 5px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--bg-deep);
+    border: 2.5px solid var(--green);
+    z-index: 2;
+  }
+  .tl-year {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .tl-event { font-size: 14px; color: rgba(245,230,211,0.7); line-height: 1.6; }
+
+  /* === IMPACT GRID === */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    gap: 16px;
+    text-align: left;
+  }
+  .impact-card {
+    border-radius: 16px;
+    padding: 26px;
+    transition: all 0.3s ease;
+  }
+  .impact-card:hover { transform: translateY(-3px); }
+  .impact-icon { font-size: 34px; margin-bottom: 14px; }
+  .impact-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .impact-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+
+  /* === QUOTE === */
+  .quote-box {
+    background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(99,102,241,0.08));
+    border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 20px;
+    padding: 36px 28px;
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .quote-text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.45;
+    margin-bottom: 14px;
+  }
+  .quote-attr { font-size: 13px; color: rgba(245,230,211,0.35); }
+
+  /* === FUN FACT TICKER === */
+  .fact-box {
+    background: rgba(245,230,211,0.04);
+    border: 1px solid rgba(245,230,211,0.08);
+    border-radius: 16px;
+    padding: 18px 26px;
+    max-width: 580px;
+    margin: 0 auto;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .fact-emoji { font-size: 30px; margin-bottom: 8px; }
+  .fact-text { font-size: 14px; color: rgba(245,230,211,0.65); font-style: italic; line-height: 1.6; max-width: 480px; }
+  .fact-dots { display: flex; gap: 6px; margin-top: 12px; }
+  .fact-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(245,230,211,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .fact-dot.active { width: 22px; border-radius: 3px; background: var(--green); }
+
+  /* === INFO BOXES === */
+  .info-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .info-box {
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .info-box-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .info-box-text { font-size: 13px; color: rgba(245,230,211,0.6); line-height: 1.7; }
+
+  /* === DNA HELIX DECORATION === */
+  .dna-strand {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 28px 0;
+    opacity: 0.15;
+  }
+  .dna-strand span {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--green);
+  }
+
+  /* === SECTION IMAGE === */
+  .section-img {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 36px;
+    position: relative;
+    border: 1px solid rgba(245,230,211,0.06);
+  }
+  .section-img img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.65) saturate(1.1);
+    transition: all 0.6s ease;
+  }
+  .section-img:hover img {
+    filter: brightness(0.8) saturate(1.2);
+    transform: scale(1.03);
+  }
+  .section-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, var(--bg-deep) 100%);
+    pointer-events: none;
+  }
+  .section-img-caption {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(245,230,211,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* === FLOATING DNA PARTICLES === */
+  .dna-particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .dna-particle {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+    10% { opacity: 0.12; }
+    90% { opacity: 0.12; }
+    100% { opacity: 0; transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  /* === CHAT SIMULATION === */
+  .chat-sim {
+    max-width: 560px;
+    margin: 0 auto;
+    background: rgba(245,230,211,0.02);
+    border: 1px solid rgba(245,230,211,0.08);
+    border-radius: 20px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .chat-sim::before {
+    content: 'CRISPR-GPT Conversation';
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,230,211,0.25);
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(245,230,211,0.06);
+  }
+  .chat-msg {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .chat-msg.show { opacity: 1; transform: translateY(0); }
+  .chat-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .chat-bubble {
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 85%;
+  }
+  .chat-user .chat-avatar { background: rgba(99,102,241,0.2); }
+  .chat-user .chat-bubble { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.15); }
+  .chat-ai .chat-avatar { background: rgba(16,185,129,0.2); }
+  .chat-ai .chat-bubble { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.12); }
+  .chat-typing { display: inline-flex; gap: 4px; padding: 4px 0; }
+  .chat-typing span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: typing 1.2s infinite;
+  }
+  .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+    30% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* === INTERACTIVE QUIZ === */
+  .quiz-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .quiz-question {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    background: rgba(245,230,211,0.03);
+    border: 1px solid rgba(245,230,211,0.08);
+    border-radius: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .quiz-opt:hover { background: rgba(245,230,211,0.06); border-color: rgba(245,230,211,0.15); color: var(--text-primary); }
+  .quiz-opt.correct { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(232,68,58,0.1); border-color: rgba(232,68,58,0.3); color: var(--red); }
+  .quiz-opt .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(245,230,211,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  .quiz-opt.correct .opt-letter { background: var(--green); color: #fff; }
+  .quiz-opt.wrong .opt-letter { background: var(--red); color: #fff; }
+  .quiz-feedback {
+    margin-top: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 24px;
+  }
+  .quiz-nav {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  .quiz-nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(245,230,211,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .quiz-nav-dot.active { background: var(--cyan); width: 24px; border-radius: 4px; }
+  .quiz-nav-dot.done { background: var(--green); }
+  .quiz-score {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    margin: 16px 0 8px;
+  }
+
+  /* === SCISSORS ANIMATION === */
+  .scissors-demo {
+    max-width: 600px;
+    margin: 0 auto 36px;
+    text-align: center;
+    padding: 32px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .dna-sequence {
+    font-family: var(--font-mono);
+    font-size: clamp(14px, 2.5vw, 20px);
+    letter-spacing: 3px;
+    line-height: 2;
+    word-break: break-all;
+    transition: all 0.3s ease;
+  }
+  .dna-sequence .base-a { color: var(--green); }
+  .dna-sequence .base-t { color: var(--cyan); }
+  .dna-sequence .base-g { color: var(--amber); }
+  .dna-sequence .base-c { color: var(--pink); }
+  .dna-sequence .cut-site {
+    position: relative;
+    text-decoration: none;
+  }
+  .dna-sequence .cut-site.snipped {
+    opacity: 0.3;
+    text-decoration: line-through;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 3px;
+  }
+  .dna-sequence .scissors-icon {
+    display: none;
+    color: var(--red);
+    font-size: 24px;
+    animation: snipBounce 0.6s ease;
+  }
+  .dna-sequence .scissors-icon.show { display: inline; }
+  @keyframes snipBounce {
+    0% { transform: scale(0) rotate(-45deg); }
+    60% { transform: scale(1.3) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+  .scissors-hint {
+    font-size: 12px;
+    color: rgba(245,230,211,0.3);
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+  }
+
+  section { padding: 50px 0; }
+  .spacer { height: 20px; }
+
+  /* === SCROLLBAR === */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: rgba(245,230,211,0.12); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(245,230,211,0.2); }
+
+  /* === NAV DOTS === */
+  .nav-dots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(245,230,211,0.15);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
+    position: relative;
+  }
+  .nav-dot:hover, .nav-dot.active {
+    background: var(--green);
+    transform: scale(1.3);
+  }
+  .nav-dot .nav-label {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15,15,25,0.92);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    font-family: var(--font-body);
+  }
+  .nav-dot:hover .nav-label { opacity: 1; }
+
+  @media (max-width: 700px) {
+    .nav-dots { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 0 16px; }
+    .metric-value { font-size: 32px; }
+    .quote-text { font-size: 18px; }
+    .quote-box { padding: 24px 18px; }
+    .chart-container { height: 220px !important; }
+    .section-img img { height: 200px; }
+  }
+
+  .counter { font-variant-numeric: tabular-nums; }
+  .sources { margin-top: 48px; font-size: 11.5px; color: rgba(245,230,211,0.2); line-height: 1.9; text-align: center; }
+
+  /* === GLOW PULSE ON METRICS === */
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    50% { box-shadow: 0 0 30px 4px rgba(16,185,129,0.12); }
+  }
+  .metric-card.glow { animation: glowPulse 3s ease-in-out infinite; }
+
+  /* === DNA ANALOGY VISUAL === */
+  .analogy-strip {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 28px 0;
+  }
+  .analogy-box {
+    text-align: center;
+    padding: 20px 16px;
+    border-radius: 16px;
+    min-width: 120px;
+    flex: 1;
+    max-width: 180px;
+    transition: all 0.35s ease;
+  }
+  .analogy-box:hover { transform: translateY(-4px); }
+  .analogy-emoji { font-size: 40px; margin-bottom: 8px; }
+  .analogy-label { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .analogy-sub { font-size: 11px; color: var(--text-muted); }
+  .analogy-arrow { font-size: 22px; color: rgba(245,230,211,0.2); flex-shrink: 0; }
+  @media (max-width: 600px) {
+    .analogy-arrow { display: none; }
+    .analogy-strip { gap: 10px; }
+    .analogy-box { min-width: 90px; padding: 14px 10px; }
+  }
+
+  /* === BASE PAIR GAME === */
+  .bp-game {
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .bp-game-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,230,211,0.25);
+    margin-bottom: 16px;
+  }
+  .bp-strand {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .bp-base {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+  }
+  .bp-connector {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .bp-bond {
+    width: 48px;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(245,230,211,0.15);
+    transition: all 0.5s ease;
+  }
+  .bp-bond.matched { color: var(--green); }
+  .bp-answer {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px dashed rgba(245,230,211,0.15);
+    background: rgba(245,230,211,0.02);
+    color: rgba(245,230,211,0.3);
+  }
+  .bp-answer:hover { border-color: rgba(245,230,211,0.3); background: rgba(245,230,211,0.05); }
+  .bp-answer.filled { border-style: solid; cursor: default; }
+  .bp-answer.correct { border-color: var(--green); background: rgba(16,185,129,0.15); color: var(--green); }
+  .bp-answer.wrong { border-color: var(--red); background: rgba(232,68,58,0.12); color: var(--red); }
+  .bp-choices {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .bp-choice {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(245,230,211,0.08);
+    background: rgba(245,230,211,0.03);
+  }
+  .bp-choice:hover { transform: scale(1.1); background: rgba(245,230,211,0.08); }
+  .bp-choice.used { opacity: 0.2; pointer-events: none; }
+  .bp-result {
+    margin-top: 16px;
+    font-size: 14px;
+    min-height: 24px;
+    transition: all 0.3s;
+  }
+
+  /* === DNA SIMILARITY BAR === */
+  .sim-bars { max-width: 520px; margin: 0 auto; }
+  .sim-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    cursor: default;
+  }
+  .sim-emoji { font-size: 28px; width: 36px; text-align: center; flex-shrink: 0; }
+  .sim-info { flex: 1; }
+  .sim-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .sim-track {
+    width: 100%;
+    height: 22px;
+    background: rgba(245,230,211,0.04);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .sim-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    width: 0%;
+    transition: width 1.6s cubic-bezier(0.16,1,0.3,1);
+  }
+  .sim-surprise {
+    font-size: 11px;
+    color: rgba(245,230,211,0.3);
+    margin-left: 48px;
+    margin-top: -8px;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  /* === TYPEWRITER EFFECT === */
+  .typewriter {
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 2vw, 16px);
+    color: var(--green);
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid var(--green);
+    display: inline-block;
+    animation: typeBlink 0.7s step-end infinite;
+    max-width: 100%;
+  }
+  @keyframes typeBlink {
+    0%, 100% { border-color: var(--green); }
+    50% { border-color: transparent; }
+  }
+
+  /* === CONFETTI === */
+  .confetti-piece {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- FLOATING DNA PARTICLES -->
+<div class="dna-particles" id="dnaParticles"></div>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<header class="container" style="padding-top: 60px; padding-bottom: 20px; text-align: center;">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); color: var(--green);">
+      Student Notes &mdash; CRISPR-GPT
+    </div>
+  </div>
+
+  <h1 class="fade-in d1" style="
+    font-family: var(--font-display);
+    font-size: clamp(38px, 6.5vw, 68px);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 22px;
+    background: linear-gradient(135deg, #F5E6D3 0%, #10B981 50%, #06B6D4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  ">Gene Editing as<br>a Conversation</h1>
+
+  <p class="fade-in d2" style="
+    font-size: clamp(16px, 2.4vw, 20px);
+    color: rgba(245,230,211,0.55);
+    max-width: 640px;
+    margin: 0 auto 36px;
+    line-height: 1.75;
+    font-weight: 300;
+  ">
+    From <span style="color: var(--amber); font-weight: 600;">"PhD Required"</span> to <span style="color: var(--green); font-weight: 600;">"Undergrad on First Try"</span> &mdash; how Stanford's CRISPR-GPT turned the most powerful biological tool into something anyone can use.
+  </p>
+
+  <!-- HERO IMAGE -->
+  <div class="fade-in d3">
+    <div class="section-img" style="margin-bottom: 24px;">
+      <img src="https://images.unsplash.com/photo-1628595351029-c2bf17511435?w=920&q=80" alt="CRISPR DNA gene editing molecular biology" />
+      <div class="section-img-caption">CRISPR &mdash; molecular scissors rewriting the code of life</div>
+    </div>
+  </div>
+
+  <!-- FUN FACT TICKER -->
+  <div class="fade-in d4">
+    <div class="fact-box" id="factBox">
+      <div class="fact-emoji" id="factEmoji"></div>
+      <p class="fact-text" id="factText"></p>
+      <div class="fact-dots" id="factDots"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ SECTION 0: DNA 101 ═══════════════════════════ -->
+<section id="sec-dna101" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.06); color: var(--amber);">00 &mdash; First, the Basics</div>
+  </div>
+  <h2 class="section-title fade-in d1">What Even <em>is DNA?</em></h2>
+  <p class="section-subtitle fade-in d2">
+    Before we talk about editing genes, let's understand what we're editing. Don't worry &mdash; no biology degree needed. Think of it like this...
+  </p>
+
+  <!-- THE ANALOGY STRIP -->
+  <div class="fade-in d2">
+    <div class="analogy-strip">
+      <div class="analogy-box" style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15);">
+        <div class="analogy-emoji">&#x1F4D6;</div>
+        <div class="analogy-label" style="color: var(--amber);">DNA</div>
+        <div class="analogy-sub">The entire recipe book</div>
+      </div>
+      <div class="analogy-arrow">&#x27A1;</div>
+      <div class="analogy-box" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.15);">
+        <div class="analogy-emoji">&#x1F4C4;</div>
+        <div class="analogy-label" style="color: var(--green);">Gene</div>
+        <div class="analogy-sub">One single recipe</div>
+      </div>
+      <div class="analogy-arrow">&#x27A1;</div>
+      <div class="analogy-box" style="background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.15);">
+        <div class="analogy-emoji">&#x1F373;</div>
+        <div class="analogy-label" style="color: var(--cyan);">Protein</div>
+        <div class="analogy-sub">The dish it makes</div>
+      </div>
+      <div class="analogy-arrow">&#x27A1;</div>
+      <div class="analogy-box" style="background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.15);">
+        <div class="analogy-emoji">&#x1F9D1;</div>
+        <div class="analogy-label" style="color: var(--purple);">Trait</div>
+        <div class="analogy-sub">Eye color, height, etc.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- THE 4 LETTERS -->
+  <div class="fade-in d3">
+    <div class="card" style="max-width: 640px; margin: 0 auto; text-align: center;">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: var(--font-mono);">The Entire Language of Life &mdash; Just 4 Letters</p>
+      <div style="font-size: clamp(32px, 5vw, 52px); font-family: var(--font-mono); font-weight: 700; letter-spacing: 16px; margin-bottom: 16px;">
+        <span style="color: var(--green);">A</span>
+        <span style="color: var(--cyan);">T</span>
+        <span style="color: var(--amber);">G</span>
+        <span style="color: var(--pink);">C</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; max-width: 480px; margin: 0 auto 16px;">
+        <div style="font-size: 11px; color: var(--green);">Adenine</div>
+        <div style="font-size: 11px; color: var(--cyan);">Thymine</div>
+        <div style="font-size: 11px; color: var(--amber);">Guanine</div>
+        <div style="font-size: 11px; color: var(--pink);">Cytosine</div>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; max-width: 480px; margin: 0 auto;">
+        Your entire body &mdash; your eyes, your brain, your heartbeat &mdash; is built from instructions written in just these <strong style="color: var(--text-primary);">4 chemical letters</strong>, arranged in ~3.2 billion pairs. That's it. Four letters. The simplicity is what makes it both beautiful and hackable.
+      </p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- THE PAIRING RULE -->
+  <div class="fade-in d3">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; font-weight: 500; text-align: center;">The Golden Rule</p>
+    <p style="text-align: center; font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">DNA bases always pair up: <strong style="color: var(--green);">A</strong> with <strong style="color: var(--cyan);">T</strong>, and <strong style="color: var(--amber);">G</strong> with <strong style="color: var(--pink);">C</strong>. Always. No exceptions. Try it yourself!</p>
+  </div>
+
+  <!-- BASE PAIR GAME -->
+  <div class="fade-in d4">
+    <div class="bp-game" id="bpGame">
+      <div class="bp-game-title">Match the Base Pairs!</div>
+      <div class="bp-strand" id="bpTop"></div>
+      <div class="bp-connector" id="bpBonds"></div>
+      <div class="bp-strand" id="bpBottom"></div>
+      <div class="bp-choices" id="bpChoices"></div>
+      <div class="bp-result" id="bpResult"></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+
+  <!-- DNA SIMILARITY - THE FUN PART -->
+  <div class="fade-in">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; font-weight: 500;">Mind-Blowing DNA Facts</p>
+    <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 24px;">How much DNA do you share with other living things? Prepare to be surprised...</p>
+  </div>
+
+  <div class="fade-in d1">
+    <div class="sim-bars" id="simBars">
+      <div class="sim-row">
+        <div class="sim-emoji">&#x1F9D1;&#x200D;&#x1F91D;&#x200D;&#x1F9D1;</div>
+        <div class="sim-info">
+          <div class="sim-name">Other Humans</div>
+          <div class="sim-track"><div class="sim-fill" data-width="99.9" style="background: linear-gradient(90deg, var(--green), var(--cyan));">99.9%</div></div>
+        </div>
+      </div>
+      <div class="sim-surprise">All of humanity's diversity comes from just 0.1% difference!</div>
+
+      <div class="sim-row">
+        <div class="sim-emoji">&#x1F412;</div>
+        <div class="sim-info">
+          <div class="sim-name">Chimpanzees</div>
+          <div class="sim-track"><div class="sim-fill" data-width="98.8" style="background: linear-gradient(90deg, var(--cyan), var(--indigo));">98.8%</div></div>
+        </div>
+      </div>
+
+      <div class="sim-row">
+        <div class="sim-emoji">&#x1F401;</div>
+        <div class="sim-info">
+          <div class="sim-name">Mice</div>
+          <div class="sim-track"><div class="sim-fill" data-width="85" style="background: linear-gradient(90deg, var(--indigo), var(--purple));">85%</div></div>
+        </div>
+      </div>
+      <div class="sim-surprise">That's why mice are used in medical research!</div>
+
+      <div class="sim-row">
+        <div class="sim-emoji">&#x1F34C;</div>
+        <div class="sim-info">
+          <div class="sim-name">Bananas</div>
+          <div class="sim-track"><div class="sim-fill" data-width="60" style="background: linear-gradient(90deg, var(--amber), var(--red));">60%</div></div>
+        </div>
+      </div>
+      <div class="sim-surprise">Yes, really. You're 60% banana. Let that sink in.</div>
+
+      <div class="sim-row">
+        <div class="sim-emoji">&#x1FAB0;</div>
+        <div class="sim-info">
+          <div class="sim-name">Fruit Flies</div>
+          <div class="sim-track"><div class="sim-fill" data-width="61" style="background: linear-gradient(90deg, var(--pink), var(--red));">61%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- MIND BLOWING NUMBERS -->
+  <div class="fade-in d2">
+    <div class="metrics-grid">
+      <div class="metric-card" style="border: 1px solid rgba(245,158,11,0.15);">
+        <div class="metric-value" style="color: var(--amber);">3.2B</div>
+        <div class="metric-label">Base Pairs in Your DNA</div>
+      </div>
+      <div class="metric-card" style="border: 1px solid rgba(6,182,212,0.15);">
+        <div class="metric-value" style="color: var(--cyan);">2m</div>
+        <div class="metric-label">DNA Length Per Cell (Stretched)</div>
+      </div>
+      <div class="metric-card" style="border: 1px solid rgba(236,72,153,0.15);">
+        <div class="metric-value" style="color: var(--pink);">37T</div>
+        <div class="metric-label">Cells in Your Body</div>
+      </div>
+      <div class="metric-card" style="border: 1px solid rgba(139,92,246,0.15);">
+        <div class="metric-value" style="color: var(--purple);">~20K</div>
+        <div class="metric-label">Genes (Fewer Than Rice!)</div>
+      </div>
+    </div>
+    <p style="text-align: center; font-size: 12px; color: rgba(245,230,211,0.25); margin-top: 12px; font-style: italic;">
+      If you stretched all the DNA from all your cells end-to-end, it would reach the Sun and back ~600 times.
+    </p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- THE PUNCHLINE -->
+  <div class="fade-in d3">
+    <div class="quote-box" style="background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(232,68,58,0.08)); border-color: rgba(245,158,11,0.15);">
+      <div class="quote-text">"If DNA is a recipe book, a genetic disease is a typo in one recipe. CRISPR is the find-and-replace tool that lets us fix it."</div>
+      <div class="quote-attr">The Simplest Explanation of Gene Editing</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 1: CRISPR 101 ═══════════════════════════ -->
+<section id="sec-crispr101" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.06); color: var(--green);">01 &mdash; The Tool</div>
+  </div>
+  <h2 class="section-title fade-in d1">What is <em>CRISPR?</em></h2>
+  <p class="section-subtitle fade-in d2">
+    CRISPR is molecular scissors for DNA. It lets scientists cut, delete, or replace specific genes in any living organism. It won the Nobel Prize in 2020 &mdash; but actually using it is extraordinarily difficult.
+  </p>
+
+  <!-- Interactive scissors demo -->
+  <div class="fade-in d2">
+    <div class="scissors-demo" id="scissorsDemo">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: var(--font-mono);">Interactive &mdash; Click to cut!</p>
+      <div class="dna-sequence" id="dnaSequence"></div>
+      <div class="scissors-hint" id="scissorsHint">Click the highlighted region to see CRISPR in action</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="steps-grid fade-in d3">
+    <div class="step-card" style="border-top: 3px solid var(--green);">
+      <div class="step-number">01</div>
+      <div class="step-icon">&#x2702;</div>
+      <div class="step-title">Find the Target</div>
+      <div class="step-desc">Design a guide RNA that matches the exact DNA sequence you want to edit. One mismatch = failed experiment or dangerous off-target cuts.</div>
+    </div>
+    <div class="step-card" style="border-top: 3px solid var(--cyan);">
+      <div class="step-number">02</div>
+      <div class="step-icon">&#x1F9EC;</div>
+      <div class="step-title">Choose the System</div>
+      <div class="step-desc">Cas9, Cas12a, base editors, prime editors &mdash; dozens of CRISPR variants exist. Each has different strengths, PAM requirements, and precision levels.</div>
+    </div>
+    <div class="step-card" style="border-top: 3px solid var(--indigo);">
+      <div class="step-number">03</div>
+      <div class="step-icon">&#x1F4E6;</div>
+      <div class="step-title">Deliver It</div>
+      <div class="step-desc">Getting CRISPR into cells requires choosing between viral vectors, lipid nanoparticles, electroporation &mdash; wrong choice = zero editing.</div>
+    </div>
+    <div class="step-card" style="border-top: 3px solid var(--purple);">
+      <div class="step-number">04</div>
+      <div class="step-icon">&#x1F50D;</div>
+      <div class="step-title">Verify Results</div>
+      <div class="step-desc">Sequencing data analysis, off-target detection, efficiency measurement. This alone can take weeks of specialized bioinformatics work.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 2: THE BOTTLENECK ═══════════════════════════ -->
+<section id="sec-bottleneck" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.06); color: var(--amber);">02 &mdash; The Problem</div>
+  </div>
+  <h2 class="section-title fade-in d1">The <em>Expertise Bottleneck</em></h2>
+  <p class="section-subtitle fade-in d2">
+    The revolution has been constrained &mdash; not by the technology, but by the knowledge required to use it. Graduate students spend 6&ndash;12 months learning these skills.
+  </p>
+
+  <!-- Lab image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?w=920&q=80" alt="Scientist working in a genetics laboratory" />
+      <div class="section-img-caption">The traditional path &mdash; years of training before your first successful edit</div>
+    </div>
+  </div>
+
+  <div class="metrics-grid fade-in d3">
+    <div class="metric-card glow">
+      <div class="metric-value" style="color: var(--red);">60-80%</div>
+      <div class="metric-label">First Experiment Failure Rate</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" style="color: var(--amber);">6-12</div>
+      <div class="metric-label">Months to Train a Researcher</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" style="color: var(--indigo);">$200K</div>
+      <div class="metric-label">Cost to Train (1-2 Years)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" style="color: var(--pink);">Dozens</div>
+      <div class="metric-label">CRISPR Systems to Choose From</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Bottleneck bar chart -->
+  <div class="fade-in d4">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 500;">Where Researchers Get Stuck</p>
+    <div class="disease-bars" id="bottleneckBars">
+      <div class="disease-row">
+        <div class="disease-name">Guide RNA Design</div>
+        <div class="bar-track"><div class="bar-fill" data-width="85" style="background: linear-gradient(90deg, var(--red), var(--amber));">85%</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name">System Selection</div>
+        <div class="bar-track"><div class="bar-fill" data-width="72" style="background: linear-gradient(90deg, var(--amber), var(--green));">72%</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name">Delivery Method</div>
+        <div class="bar-track"><div class="bar-fill" data-width="68" style="background: linear-gradient(90deg, var(--green), var(--cyan));">68%</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name">Data Analysis</div>
+        <div class="bar-track"><div class="bar-fill" data-width="78" style="background: linear-gradient(90deg, var(--indigo), var(--purple));">78%</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name">Troubleshooting</div>
+        <div class="bar-track"><div class="bar-fill" data-width="90" style="background: linear-gradient(90deg, var(--purple), var(--pink));">90%</div></div>
+      </div>
+    </div>
+    <p style="font-size: 11px; color: rgba(245,230,211,0.25); margin-top: 8px; font-style: italic;">Percentage of beginners reporting difficulty in each area</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 3: CRISPR-GPT ═══════════════════════════ -->
+<section id="sec-crisprgpt" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(6,182,212,0.3); background: rgba(6,182,212,0.06); color: var(--cyan);">03 &mdash; The Breakthrough</div>
+  </div>
+  <h2 class="section-title fade-in d1">Enter <em>CRISPR-GPT</em></h2>
+  <p class="section-subtitle fade-in d2">
+    Stanford's Le Cong lab built an LLM-based AI co-pilot for gene editing. Not just a chatbot &mdash; a deeply integrated system with four critical components.
+  </p>
+
+  <!-- AI Image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=920&q=80" alt="AI and machine learning concept visualization" />
+      <div class="section-img-caption">AI meets biology &mdash; the convergence that changes everything</div>
+    </div>
+  </div>
+
+  <!-- Architecture cards -->
+  <div class="fade-in d3" style="margin-bottom: 40px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="card" style="border-top: 3px solid var(--green); text-align: center;">
+        <div style="font-size: 34px; margin-bottom: 10px;">&#x1F9E9;</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 6px;">Task Decomposition</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Breaks "knock out TP53" into a complete step-by-step experimental workflow automatically</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--cyan); text-align: center;">
+        <div style="font-size: 34px; margin-bottom: 10px;">&#x1F4DA;</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 6px;">Domain Retrieval</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Connected to literature, protocols, and biological databases in real-time</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--indigo); text-align: center;">
+        <div style="font-size: 34px; margin-bottom: 10px;">&#x1F9E0;</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 6px;">Expert Fine-Tuning</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Trained on real expert forum discussions &mdash; capturing tricks that never make it into papers</div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--purple); text-align: center;">
+        <div style="font-size: 34px; margin-bottom: 10px;">&#x1F4AC;</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 6px;">Interactive Dialogue</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Engages in back-and-forth conversation, explains reasoning, adapts to your experiment</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE CHAT SIMULATION -->
+  <div class="fade-in d4">
+    <div class="chat-sim" id="chatSim">
+      <div class="chat-msg chat-user" id="chat0">
+        <div class="chat-avatar">&#x1F9D1;&#x200D;&#x1F393;</div>
+        <div class="chat-bubble">I want to knock out the TP53 gene in HEK293 cells. I've never done CRISPR before. Where do I start?</div>
+      </div>
+      <div class="chat-msg chat-ai" id="chat1">
+        <div class="chat-avatar">&#x1F916;</div>
+        <div class="chat-bubble">Great choice for a first experiment! For TP53 knockout in HEK293, I recommend <strong style="color: var(--green);">SpCas9</strong> with a dual-gRNA strategy. I've designed 3 guide RNAs targeting exon 4 with <strong style="color: var(--cyan);">zero predicted off-target sites</strong> in coding regions. Shall I walk you through the delivery protocol?</div>
+      </div>
+      <div class="chat-msg chat-user" id="chat2">
+        <div class="chat-avatar">&#x1F9D1;&#x200D;&#x1F393;</div>
+        <div class="chat-bubble">Yes please! Also, why SpCas9 and not Cas12a?</div>
+      </div>
+      <div class="chat-msg chat-ai" id="chat3">
+        <div class="chat-avatar">&#x1F916;</div>
+        <div class="chat-bubble">Good question! TP53's exon 4 region is <strong style="color: var(--amber);">GC-rich (~62%)</strong>, and SpCas9 performs better in GC-rich regions. Cas12a prefers AT-rich targets. Also, for HEK293 cells, I'd suggest <strong style="color: var(--green);">lipofection</strong> over electroporation &mdash; higher viability with this cell line. Here's your complete protocol...</div>
+      </div>
+    </div>
+    <p style="text-align: center; font-size: 11px; color: rgba(245,230,211,0.25); margin-top: 10px; font-family: var(--font-mono);">Simulated conversation based on CRISPR-GPT capabilities</p>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+
+  <!-- The key insight -->
+  <div class="fade-in">
+    <div class="quote-box">
+      <div class="quote-text">"The clever innovation: training on expert forum discussions captures the tricks that never make it into publications &mdash; the informal reasoning process experienced scientists use."</div>
+      <div class="quote-attr">Tacit Knowledge &mdash; The Secret Ingredient</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 4: THE RESULTS ═══════════════════════════ -->
+<section id="sec-results" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(99,102,241,0.3); background: rgba(99,102,241,0.06); color: var(--indigo);">04 &mdash; The Results</div>
+  </div>
+  <h2 class="section-title fade-in d1">The <em>Stunning</em> Results</h2>
+  <p class="section-subtitle fade-in d2">
+    An undergraduate with zero experience achieved 90%+ editing efficiency on their first attempt. Experienced researchers often spend months optimizing to reach 70-80%.
+  </p>
+
+  <div class="metrics-grid fade-in d3">
+    <div class="metric-card glow" style="border: 1px solid rgba(16,185,129,0.15);">
+      <div class="metric-value" style="color: var(--green);">90%+</div>
+      <div class="metric-label">Editing Efficiency (First Try)</div>
+    </div>
+    <div class="metric-card" style="border: 1px solid rgba(6,182,212,0.15);">
+      <div class="metric-value" style="color: var(--cyan);">Zero</div>
+      <div class="metric-label">Prior Experience Needed</div>
+    </div>
+    <div class="metric-card" style="border: 1px solid rgba(99,102,241,0.15);">
+      <div class="metric-value" style="color: var(--indigo);">Weeks</div>
+      <div class="metric-label">Not Months to Results</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+
+  <!-- Old vs New comparison -->
+  <div class="comparison-grid fade-in d4">
+    <div class="comparison-card" style="background: rgba(232,68,58,0.06); border: 1px solid rgba(232,68,58,0.12);">
+      <div class="comparison-icon">&#x1F4C9;</div>
+      <div class="comparison-title" style="color: var(--red);">Old Model</div>
+      <ul class="comparison-list">
+        <li><span style="color: var(--red);">&#x2717;</span> $100K&ndash;$200K training cost</li>
+        <li><span style="color: var(--red);">&#x2717;</span> 1&ndash;2 years to competency</li>
+        <li><span style="color: var(--red);">&#x2717;</span> 60&ndash;80% first experiment failure</li>
+        <li><span style="color: var(--red);">&#x2717;</span> Months to optimize protocols</li>
+        <li><span style="color: var(--red);">&#x2717;</span> Knowledge siloed in experts</li>
+      </ul>
+    </div>
+    <div class="comparison-card" style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.12);">
+      <div class="comparison-icon">&#x1F680;</div>
+      <div class="comparison-title" style="color: var(--green);">New Model (CRISPR-GPT)</div>
+      <ul class="comparison-list">
+        <li><span style="color: var(--green);">&#x2713;</span> Instant expertise access</li>
+        <li><span style="color: var(--green);">&#x2713;</span> Undergrads succeed in weeks</li>
+        <li><span style="color: var(--green);">&#x2713;</span> 90%+ efficiency on first try</li>
+        <li><span style="color: var(--green);">&#x2713;</span> AI handles protocol design</li>
+        <li><span style="color: var(--green);">&#x2713;</span> Expert knowledge democratized</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 5: MARKET ═══════════════════════════ -->
+<section id="sec-market" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(236,72,153,0.3); background: rgba(236,72,153,0.06); color: var(--pink);">05 &mdash; The Market</div>
+  </div>
+  <h2 class="section-title fade-in d1">A <em>$22.4 Billion</em> Future</h2>
+  <p class="section-subtitle fade-in d2">
+    The global gene editing market is projected to triple as the expertise bottleneck disappears. More accessible tools = more experiments = faster breakthroughs.
+  </p>
+
+  <div class="chart-wrap fade-in d3">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 500;">Gene Editing Market Size (USD Billions)</p>
+    <div class="chart-container" style="height: 300px;">
+      <canvas id="marketChart"></canvas>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Application areas with images -->
+  <div class="fade-in d4">
+    <div class="info-boxes">
+      <div class="info-box" style="background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.1);">
+        <div style="font-size: 32px; margin-bottom: 10px;">&#x1F489;</div>
+        <div class="info-box-title" style="color: var(--green);">Therapeutics</div>
+        <div class="info-box-text">Sickle cell disease, cancer immunotherapy, genetic disorders. CRISPR-based treatments are already FDA-approved. Casgevy became the first in 2023.</div>
+      </div>
+      <div class="info-box" style="background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.1);">
+        <div style="font-size: 32px; margin-bottom: 10px;">&#x1F33E;</div>
+        <div class="info-box-title" style="color: var(--amber);">Agriculture</div>
+        <div class="info-box-text">Drought-resistant crops, disease-resistant livestock, enhanced nutrition. Gene editing accelerates what traditional breeding takes decades to achieve.</div>
+      </div>
+      <div class="info-box" style="background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.1);">
+        <div style="font-size: 32px; margin-bottom: 10px;">&#x1F52C;</div>
+        <div class="info-box-title" style="color: var(--purple);">Research Tools</div>
+        <div class="info-box-text">Every biology lab uses CRISPR. Making it easier = exponentially more experiments worldwide = faster scientific progress across all fields.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 6: AI-BIO CONVERGENCE ═══════════════════════════ -->
+<section id="sec-convergence" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.06); color: var(--purple);">06 &mdash; The Pattern</div>
+  </div>
+  <h2 class="section-title fade-in d1">AI-Bio <em>Convergence</em></h2>
+  <p class="section-subtitle fade-in d2">
+    CRISPR-GPT isn't an isolated event. It's part of an accelerating convergence where AI is becoming the knowledge layer for biology.
+  </p>
+
+  <!-- Convergence image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=920&q=80" alt="Futuristic laboratory with digital interfaces" />
+      <div class="section-img-caption">The future of biology &mdash; AI-augmented labs and instant expertise</div>
+    </div>
+  </div>
+
+  <div class="timeline fade-in d3">
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color: var(--green);"></div>
+      <div class="tl-year" style="color: var(--green);">AlphaFold</div>
+      <div class="tl-event">Protein structure prediction went from years of lab work to seconds of computation. 200M+ structures predicted. Nobel Prize 2024.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color: var(--cyan);"></div>
+      <div class="tl-year" style="color: var(--cyan);">DNA Language Models</div>
+      <div class="tl-event">Models trained on genomic sequences predict regulatory elements, gene expression, and mutation effects &mdash; reading the genome like natural language.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color: var(--indigo);"></div>
+      <div class="tl-year" style="color: var(--indigo);">CRISPR-GPT</div>
+      <div class="tl-event">Expert gene-editing knowledge encoded in an AI co-pilot. Undergraduates match PhD performance. The expertise bottleneck breaks open.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color: var(--purple);"></div>
+      <div class="tl-year" style="color: var(--purple);">The Stack Effect</div>
+      <div class="tl-event">These tools compound. AI-designed proteins + AI-guided gene editing + AI-predicted regulation = an entirely AI-augmented biology pipeline.</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="fade-in d4">
+    <div class="quote-box" style="background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(236,72,153,0.08)); border-color: rgba(139,92,246,0.15);">
+      <div class="quote-text">"The hard problem isn't hardware &mdash; we have CRISPR. It's the knowledge layer. AI bridges that gap by encoding expert knowledge in accessible form."</div>
+      <div class="quote-attr">The Real Bottleneck Was Always Knowledge</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 7: GOVERNANCE ═══════════════════════════ -->
+<section id="sec-governance" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(236,72,153,0.3); background: rgba(236,72,153,0.06); color: var(--pink);">07 &mdash; The Challenge</div>
+  </div>
+  <h2 class="section-title fade-in d1">The <em>Governance</em> Question</h2>
+  <p class="section-subtitle fade-in d2">
+    Making gene editing accessible to everyone is powerful &mdash; and raises profound questions. Democratized CRISPR needs proactive, not reactive, frameworks.
+  </p>
+
+  <div class="steps-grid fade-in d3">
+    <div class="step-card" style="border-top: 3px solid var(--pink);">
+      <div class="step-number">?</div>
+      <div class="step-icon">&#x2696;</div>
+      <div class="step-title">Regulatory Lag</div>
+      <div class="step-desc">AI moves faster than policy. Current frameworks weren't designed for AI-guided biology. Who's responsible when an AI co-pilot designs an experiment?</div>
+    </div>
+    <div class="step-card" style="border-top: 3px solid var(--red);">
+      <div class="step-number">?</div>
+      <div class="step-icon">&#x1F510;</div>
+      <div class="step-title">Dual-Use Risk</div>
+      <div class="step-desc">The same tool that makes therapeutics easier could lower barriers for misuse. Biosecurity frameworks need updating for the AI-assisted era.</div>
+    </div>
+    <div class="step-card" style="border-top: 3px solid var(--amber);">
+      <div class="step-number">?</div>
+      <div class="step-icon">&#x1F3DB;</div>
+      <div class="step-title">Liability & Ethics</div>
+      <div class="step-desc">If an AI suggests a protocol that fails or causes harm &mdash; who is liable? The researcher, the institution, or the AI developers?</div>
+    </div>
+    <div class="step-card" style="border-top: 3px solid var(--green);">
+      <div class="step-number">!</div>
+      <div class="step-icon">&#x1F91D;</div>
+      <div class="step-title">Proactive Approach</div>
+      <div class="step-desc">Build governance INTO the AI: safety checks, institutional review integration, usage logging, and transparent reasoning. Don't wait for something to go wrong.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION 8: QUIZ ═══════════════════════════ -->
+<section id="sec-quiz" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(6,182,212,0.3); background: rgba(6,182,212,0.06); color: var(--cyan);">Test Yourself</div>
+  </div>
+  <h2 class="section-title fade-in d1">Quick <em>Quiz</em></h2>
+  <p class="section-subtitle fade-in d2">
+    How much did you pick up? Test your knowledge with these quick questions!
+  </p>
+
+  <div class="fade-in d3">
+    <div class="quiz-wrap" id="quizWrap">
+      <div class="quiz-question" id="quizQ"></div>
+      <div class="quiz-options" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-nav" id="quizNav"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="container" style="padding: 40px 0 60px; text-align: center;">
+  <div class="dna-strand fade-in">
+    <span>A T G C &middot; C G T A &middot; G A T C &middot; T C A G &middot; A T G C</span>
+  </div>
+
+  <div class="fade-in d1" style="margin-top: 20px;">
+    <div class="quote-box" style="background: linear-gradient(135deg, rgba(6,182,212,0.08), rgba(16,185,129,0.08)); border-color: rgba(6,182,212,0.15);">
+      <div class="quote-text">"More accessible gene editing &rarr; more experiments &rarr; better therapeutics and agriculture. The technology stack is becoming deeply interdependent."</div>
+      <div class="quote-attr">The Compounding Effect</div>
+    </div>
+  </div>
+
+  <div class="sources fade-in d2">
+    CRISPR-GPT &mdash; Stanford Le Cong Lab &bull; Nature Biotechnology &bull; Gene Editing Market &mdash; Grand View Research<br>
+    AlphaFold &mdash; DeepMind &bull; Nobel Prize in Chemistry 2020 (Doudna & Charpentier) &bull; 2024 (Hassabis & Jumper)<br><br>
+    <span style="opacity: 0.6;">INITIUM &mdash; Student Reference Notes</span>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SCRIPTS -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<script>
+/* ─── Intersection observer for fade-in ─── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+setTimeout(() => document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('force-visible')), 4000);
+
+/* ─── Nav dots ─── */
+const sections = [
+  { id: 'sec-dna101', label: 'DNA 101' },
+  { id: 'sec-crispr101', label: 'CRISPR 101' },
+  { id: 'sec-bottleneck', label: 'The Problem' },
+  { id: 'sec-crisprgpt', label: 'CRISPR-GPT' },
+  { id: 'sec-results', label: 'Results' },
+  { id: 'sec-market', label: 'Market' },
+  { id: 'sec-convergence', label: 'AI-Bio' },
+  { id: 'sec-governance', label: 'Governance' },
+  { id: 'sec-quiz', label: 'Quiz' },
+];
+const navDots = document.getElementById('navDots');
+sections.forEach(s => {
+  const b = document.createElement('button');
+  b.className = 'nav-dot';
+  b.innerHTML = `<span class="nav-label">${s.label}</span>`;
+  b.onclick = () => document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth' });
+  b.dataset.sec = s.id;
+  navDots.appendChild(b);
+});
+const dotObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+      const dot = navDots.querySelector(`[data-sec="${e.target.id}"]`);
+      if (dot) dot.classList.add('active');
+    }
+  });
+}, { threshold: 0.35 });
+sections.forEach(s => { const el = document.getElementById(s.id); if (el) dotObserver.observe(el); });
+
+/* ─── Bar animation ─── */
+const barObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach((bar, i) => {
+        setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, i * 120);
+      });
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.disease-bars').forEach(el => barObs.observe(el));
+
+/* ─── Similarity bars animation ─── */
+const simObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.sim-fill').forEach((bar, i) => {
+        setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, i * 250);
+      });
+      simObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const simEl = document.getElementById('simBars');
+if (simEl) simObs.observe(simEl);
+
+/* ─── Base Pair Matching Game ─── */
+const bpPairs = { A: 'T', T: 'A', G: 'C', C: 'G' };
+const bpColors = { A: 'var(--green)', T: 'var(--cyan)', G: 'var(--amber)', C: 'var(--pink)' };
+const bpTopSeq = ['A', 'T', 'G', 'C', 'A', 'G'];
+let bpAnswers = new Array(bpTopSeq.length).fill(null);
+let bpCurrentSlot = 0;
+
+function initBPGame() {
+  const topEl = document.getElementById('bpTop');
+  const bondsEl = document.getElementById('bpBonds');
+  const bottomEl = document.getElementById('bpBottom');
+  const choicesEl = document.getElementById('bpChoices');
+  const resultEl = document.getElementById('bpResult');
+
+  if (!topEl) return;
+
+  // Render top strand
+  topEl.innerHTML = bpTopSeq.map(b =>
+    `<div class="bp-base" style="background: ${bpColors[b]}22; color: ${bpColors[b]}; border: 1px solid ${bpColors[b]}44;">${b}</div>`
+  ).join('');
+
+  // Render bonds
+  bondsEl.innerHTML = bpTopSeq.map(() => '<div class="bp-bond">&#x22EE;</div>').join('');
+
+  // Render bottom strand (empty slots)
+  bottomEl.innerHTML = bpTopSeq.map((_, i) =>
+    `<div class="bp-answer" id="bp-slot-${i}" data-idx="${i}">?</div>`
+  ).join('');
+
+  bpAnswers = new Array(bpTopSeq.length).fill(null);
+  bpCurrentSlot = 0;
+  resultEl.textContent = '';
+  highlightCurrentSlot();
+
+  // Render choices
+  choicesEl.innerHTML = ['A', 'T', 'G', 'C'].map(b =>
+    `<div class="bp-choice" style="color: ${bpColors[b]}; border-color: ${bpColors[b]}44;" onclick="pickBase('${b}')">${b}</div>`
+  ).join('');
+}
+
+function highlightCurrentSlot() {
+  document.querySelectorAll('.bp-answer').forEach((el, i) => {
+    if (i === bpCurrentSlot && !bpAnswers[i]) {
+      el.style.borderColor = 'rgba(245,230,211,0.4)';
+      el.style.background = 'rgba(245,230,211,0.06)';
+    }
+  });
+}
+
+function pickBase(base) {
+  if (bpCurrentSlot >= bpTopSeq.length) return;
+  const correct = bpPairs[bpTopSeq[bpCurrentSlot]];
+  const slot = document.getElementById('bp-slot-' + bpCurrentSlot);
+  const bond = document.querySelectorAll('.bp-bond')[bpCurrentSlot];
+
+  slot.textContent = base;
+  slot.classList.add('filled');
+  bpAnswers[bpCurrentSlot] = base;
+
+  if (base === correct) {
+    slot.classList.add('correct');
+    slot.style.color = bpColors[base];
+    slot.style.borderColor = bpColors[base];
+    slot.style.background = bpColors[base] + '22';
+    bond.classList.add('matched');
+    bond.innerHTML = '&#x2502;<br>&#x2502;';
+  } else {
+    slot.classList.add('wrong');
+    setTimeout(() => {
+      slot.textContent = correct;
+      slot.classList.remove('wrong');
+      slot.classList.add('correct');
+      slot.style.color = bpColors[correct];
+      slot.style.borderColor = bpColors[correct];
+      slot.style.background = bpColors[correct] + '22';
+      bond.classList.add('matched');
+      bond.innerHTML = '&#x2502;<br>&#x2502;';
+      bpAnswers[bpCurrentSlot] = correct;
+    }, 600);
+  }
+
+  bpCurrentSlot++;
+  if (bpCurrentSlot < bpTopSeq.length) {
+    highlightCurrentSlot();
+  } else {
+    setTimeout(() => {
+      const score = bpAnswers.filter((a, i) => a === bpPairs[bpTopSeq[i]]).length;
+      const resultEl = document.getElementById('bpResult');
+      if (score === bpTopSeq.length) {
+        resultEl.innerHTML = '<span style="color: var(--green); font-weight: 700;">Perfect! You just read DNA like a biologist!</span>';
+        launchConfetti();
+      } else {
+        resultEl.innerHTML = `<span style="color: var(--cyan);">You got ${score}/${bpTopSeq.length}! Remember: A pairs with T, G pairs with C.</span>`;
+      }
+      // Show replay
+      setTimeout(() => {
+        resultEl.innerHTML += ' <span onclick="initBPGame()" style="color: var(--amber); cursor: pointer; text-decoration: underline;">Play again?</span>';
+      }, 1500);
+    }, 800);
+  }
+}
+initBPGame();
+
+/* ─── Confetti ─── */
+function launchConfetti() {
+  const colors = ['#10B981', '#06B6D4', '#F59E0B', '#EC4899', '#8B5CF6', '#6366F1'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.top = '-10px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 5500);
+  }
+}
+
+/* ─── Fun fact ticker ─── */
+const facts = [
+  { emoji: '\u2702\uFE0F', text: 'CRISPR stands for "Clustered Regularly Interspaced Short Palindromic Repeats" \u2014 originally discovered as a bacterial immune system against viruses.' },
+  { emoji: '\uD83E\uDDEC', text: 'There are over 40 known CRISPR-associated (Cas) proteins. Choosing the wrong one for your experiment is one of the most common beginner mistakes.' },
+  { emoji: '\uD83C\uDFC6', text: 'Jennifer Doudna and Emmanuelle Charpentier won the 2020 Nobel Prize in Chemistry for CRISPR-Cas9 \u2014 just 8 years after their landmark paper.' },
+  { emoji: '\uD83D\uDCB0', text: 'The first CRISPR-based therapy (Casgevy for sickle cell disease) was approved by the FDA in 2023. A single treatment costs approximately $2.2 million.' },
+  { emoji: '\uD83E\uDD16', text: 'CRISPR-GPT was built by Stanford\'s Le Cong lab \u2014 Le Cong was one of the first researchers to use CRISPR in human cells back in 2013.' },
+  { emoji: '\uD83D\uDC3B', text: 'Scientists have used CRISPR to make woolly mammoth genes active in elephant cells. De-extinction might actually happen in our lifetime!' },
+  { emoji: '\uD83C\uDF4C', text: 'Bananas are under threat from a fungus called TR4. CRISPR-edited bananas resistant to this disease are already being tested in field trials.' },
+];
+let factIdx = 0;
+const factEmoji = document.getElementById('factEmoji');
+const factText = document.getElementById('factText');
+const factDotsEl = document.getElementById('factDots');
+facts.forEach((_, i) => {
+  const d = document.createElement('span');
+  d.className = 'fact-dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => showFact(i);
+  factDotsEl.appendChild(d);
+});
+function showFact(i) {
+  factIdx = i;
+  factEmoji.textContent = facts[i].emoji;
+  factText.textContent = facts[i].text;
+  factDotsEl.querySelectorAll('.fact-dot').forEach((d, j) => d.classList.toggle('active', j === i));
+}
+showFact(0);
+setInterval(() => showFact((factIdx + 1) % facts.length), 5000);
+
+/* ─── Floating DNA particles ─── */
+const particleContainer = document.getElementById('dnaParticles');
+const bases = ['A', 'T', 'G', 'C'];
+const baseColors = { A: '#10B981', T: '#06B6D4', G: '#F59E0B', C: '#EC4899' };
+function spawnParticle() {
+  const el = document.createElement('span');
+  el.className = 'dna-particle';
+  const base = bases[Math.floor(Math.random() * 4)];
+  el.textContent = base;
+  el.style.color = baseColors[base];
+  el.style.left = Math.random() * 100 + '%';
+  el.style.fontSize = (12 + Math.random() * 18) + 'px';
+  el.style.animationDuration = (15 + Math.random() * 25) + 's';
+  el.style.animationDelay = Math.random() * 5 + 's';
+  particleContainer.appendChild(el);
+  setTimeout(() => el.remove(), 45000);
+}
+for (let i = 0; i < 20; i++) setTimeout(spawnParticle, i * 800);
+setInterval(spawnParticle, 2500);
+
+/* ─── Interactive CRISPR scissors ─── */
+const seqEl = document.getElementById('dnaSequence');
+const hintEl = document.getElementById('scissorsHint');
+const dna = 'ATGCTAGCGATCGATCG';
+const cutStart = 6, cutEnd = 12;
+let hasSnipped = false;
+
+function renderDNA() {
+  let html = '';
+  for (let i = 0; i < dna.length; i++) {
+    const cls = 'base-' + dna[i].toLowerCase();
+    if (i >= cutStart && i < cutEnd) {
+      html += `<span class="cut-site ${cls}" style="background: rgba(232,68,58,0.15); border-radius: 3px; padding: 2px 1px; cursor: pointer;" data-idx="${i}">${dna[i]}</span>`;
+    } else {
+      html += `<span class="${cls}">${dna[i]}</span>`;
+    }
+  }
+  seqEl.innerHTML = html;
+  seqEl.querySelectorAll('.cut-site').forEach(el => {
+    el.addEventListener('click', snipDNA);
+  });
+}
+
+function snipDNA() {
+  if (hasSnipped) return;
+  hasSnipped = true;
+  const cutSites = seqEl.querySelectorAll('.cut-site');
+  cutSites.forEach(el => el.classList.add('snipped'));
+
+  // Insert scissors icon at cut point
+  const scissorsSpan = document.createElement('span');
+  scissorsSpan.className = 'scissors-icon show';
+  scissorsSpan.textContent = ' \u2702\uFE0F ';
+  cutSites[0].parentNode.insertBefore(scissorsSpan, cutSites[0]);
+
+  hintEl.innerHTML = '<span style="color: var(--green);">Snip! CRISPR just cut the DNA at the target site. The cell will now try to repair it \u2014 and that\'s how we knock out genes!</span>';
+
+  // After a moment, show the "repaired" version
+  setTimeout(() => {
+    hintEl.innerHTML = '<span style="color: var(--cyan);">Click to reset and try again!</span>';
+    seqEl.style.cursor = 'pointer';
+    seqEl.onclick = () => {
+      hasSnipped = false;
+      seqEl.style.cursor = '';
+      seqEl.onclick = null;
+      hintEl.textContent = 'Click the highlighted region to see CRISPR in action';
+      renderDNA();
+    };
+  }, 3000);
+}
+renderDNA();
+
+/* ─── Chat simulation auto-play ─── */
+const chatObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const msgs = e.target.querySelectorAll('.chat-msg');
+      msgs.forEach((msg, i) => {
+        setTimeout(() => msg.classList.add('show'), i * 900);
+      });
+      chatObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+chatObs.observe(document.getElementById('chatSim'));
+
+/* ─── Quiz ─── */
+const quizData = [
+  {
+    q: 'In DNA, which base pairs with Adenine (A)?',
+    opts: ['Cytosine (C)', 'Guanine (G)', 'Thymine (T)', 'Another Adenine (A)'],
+    ans: 2,
+    explain: 'A always pairs with T, and G always pairs with C. That\u2019s the golden rule of DNA! If you played the base-pair game above, you already knew this.'
+  },
+  {
+    q: 'How much DNA do you share with a banana?',
+    opts: ['About 10%', 'About 30%', 'About 60%', 'About 90%'],
+    ans: 2,
+    explain: 'About 60%! All life on Earth shares common ancestors, so fundamental cellular machinery is remarkably similar across species.'
+  },
+  {
+    q: 'What does CRISPR originally come from?',
+    opts: ['A computer algorithm', 'A bacterial immune system', 'A type of microscope', 'A protein found in humans'],
+    ans: 1,
+    explain: 'CRISPR was discovered as a natural defense mechanism bacteria use to fight off viruses \u2014 they store viral DNA snippets to recognize threats!'
+  },
+  {
+    q: 'What did the undergraduate achieve with CRISPR-GPT on their first try?',
+    opts: ['50% editing efficiency', '70% editing efficiency', '90%+ editing efficiency', 'It didn\'t work at all'],
+    ans: 2,
+    explain: '90%+ editing efficiency on the very first attempt \u2014 a result that usually takes experienced researchers months of optimization!'
+  },
+  {
+    q: 'What makes CRISPR-GPT different from just asking ChatGPT about CRISPR?',
+    opts: ['It\'s the same thing, just rebranded', 'It\'s fine-tuned on expert discussions and connected to biology databases', 'It only works on weekdays', 'It requires a PhD to use'],
+    ans: 1,
+    explain: 'CRISPR-GPT is specifically fine-tuned on expert forum discussions (capturing tacit knowledge) and integrated with real domain databases and tools.'
+  },
+  {
+    q: 'Why would you choose SpCas9 over Cas12a for a GC-rich DNA target?',
+    opts: ['SpCas9 is cheaper', 'SpCas9 performs better in GC-rich regions', 'Cas12a doesn\'t exist yet', 'There\'s no difference'],
+    ans: 1,
+    explain: 'SpCas9 works better in GC-rich regions, while Cas12a prefers AT-rich targets. This is exactly the kind of tacit knowledge CRISPR-GPT learned from expert forums!'
+  },
+  {
+    q: 'What was the gene editing market size in 2024?',
+    opts: ['$1.2 Billion', '$7.2 Billion', '$22.4 Billion', '$50 Billion'],
+    ans: 1,
+    explain: '$7.2 Billion in 2024, projected to reach $22.4 Billion by 2032 \u2014 more than tripling as AI removes the expertise bottleneck.'
+  },
+];
+let quizIdx = 0, quizScore = 0, quizAnswered = new Array(quizData.length).fill(false);
+
+function renderQuiz() {
+  const q = quizData[quizIdx];
+  document.getElementById('quizQ').textContent = q.q;
+  const optsEl = document.getElementById('quizOpts');
+  optsEl.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-opt';
+    div.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    if (!quizAnswered[quizIdx]) {
+      div.onclick = () => answerQuiz(i);
+    }
+    optsEl.appendChild(div);
+  });
+  document.getElementById('quizFeedback').textContent = '';
+
+  // Nav dots
+  const nav = document.getElementById('quizNav');
+  nav.innerHTML = '';
+  quizData.forEach((_, i) => {
+    const d = document.createElement('span');
+    d.className = 'quiz-nav-dot' + (i === quizIdx ? ' active' : '') + (quizAnswered[i] ? ' done' : '');
+    d.onclick = () => { quizIdx = i; renderQuiz(); };
+    nav.appendChild(d);
+  });
+}
+
+function answerQuiz(choice) {
+  if (quizAnswered[quizIdx]) return;
+  quizAnswered[quizIdx] = true;
+  const q = quizData[quizIdx];
+  const opts = document.querySelectorAll('#quizOpts .quiz-opt');
+  opts[q.ans].classList.add('correct');
+  if (choice !== q.ans) {
+    opts[choice].classList.add('wrong');
+  } else {
+    quizScore++;
+  }
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  document.getElementById('quizFeedback').innerHTML = `<span style="color: ${choice === q.ans ? 'var(--green)' : 'var(--red)'}; font-weight: 600;">${choice === q.ans ? 'Correct!' : 'Not quite!'}</span> ${q.explain}`;
+
+  // Auto advance after delay
+  setTimeout(() => {
+    if (quizIdx < quizData.length - 1) {
+      quizIdx++;
+      renderQuiz();
+    } else if (quizAnswered.every(Boolean)) {
+      showQuizResults();
+    }
+  }, 3500);
+
+  // Update nav dots
+  const navDots = document.querySelectorAll('#quizNav .quiz-nav-dot');
+  navDots[quizIdx].classList.add('done');
+}
+
+function showQuizResults() {
+  const wrap = document.getElementById('quizWrap');
+  const pct = Math.round((quizScore / quizData.length) * 100);
+  const msg = pct >= 80 ? 'You\'re a CRISPR natural!' : pct >= 60 ? 'Solid understanding!' : 'Keep learning \u2014 you\'re getting there!';
+  const color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--cyan)' : 'var(--amber)';
+  if (pct >= 80) launchConfetti();
+  wrap.innerHTML = `
+    <div style="font-size: 48px; margin-bottom: 8px;">${pct >= 80 ? '\uD83C\uDF89' : pct >= 60 ? '\uD83D\uDC4D' : '\uD83D\uDCDA'}</div>
+    <div class="quiz-score" style="color: ${color};">${quizScore}/${quizData.length}</div>
+    <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">${msg}</div>
+    <div style="font-size: 13px; color: var(--text-muted);">You scored ${pct}% on the CRISPR-GPT quiz</div>
+    <div style="margin-top: 20px;">
+      <button onclick="resetQuiz()" style="background: rgba(245,230,211,0.06); border: 1px solid rgba(245,230,211,0.15); color: var(--text-primary); padding: 10px 24px; border-radius: 10px; cursor: pointer; font-family: var(--font-body); font-size: 13px; transition: all 0.3s;">Try Again</button>
+    </div>
+  `;
+}
+
+function resetQuiz() {
+  quizIdx = 0;
+  quizScore = 0;
+  quizAnswered = new Array(quizData.length).fill(false);
+  document.getElementById('quizWrap').innerHTML = `
+    <div class="quiz-question" id="quizQ"></div>
+    <div class="quiz-options" id="quizOpts"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-nav" id="quizNav"></div>
+  `;
+  renderQuiz();
+}
+renderQuiz();
+
+/* ─── Market chart ─── */
+const ctx = document.getElementById('marketChart');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032'],
+      datasets: [{
+        label: 'Market Size ($B)',
+        data: [5.3, 6.2, 7.2, 8.5, 10.0, 11.8, 13.9, 15.8, 18.0, 20.1, 22.4],
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+          g.addColorStop(0, 'rgba(16,185,129,0.7)');
+          g.addColorStop(1, 'rgba(6,182,212,0.3)');
+          return g;
+        },
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(10,10,20,0.9)',
+          titleColor: '#F5E6D3',
+          bodyColor: '#F5E6D3',
+          borderColor: 'rgba(16,185,129,0.3)',
+          borderWidth: 1,
+          cornerRadius: 8,
+          callbacks: {
+            label: (c) => `$${c.parsed.y}B`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(245,230,211,0.04)' },
+          ticks: { color: 'rgba(245,230,211,0.35)', font: { family: "'JetBrains Mono'", size: 11 } }
+        },
+        y: {
+          grid: { color: 'rgba(245,230,211,0.04)' },
+          ticks: {
+            color: 'rgba(245,230,211,0.35)',
+            font: { family: "'JetBrains Mono'", size: 11 },
+            callback: (v) => '$' + v + 'B'
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
