@@ -944,6 +944,87 @@
   </div>
 </header>
 
+<!-- ═══════════════════════════ SECTION: FUN OPENER ═══════════════════════════ -->
+<section id="sec-opener" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(232,68,58,0.3); background: rgba(232,68,58,0.06); color: var(--red);">Let's Start Fun</div>
+  </div>
+  <h2 class="section-title fade-in d1">What If You Could <em>Ctrl+F</em> Your Body?</h2>
+  <p class="section-subtitle fade-in d2">
+    Imagine opening your body like a Word document. You find a typo that's causing a disease. You highlight it, hit delete, type the correct letter, and save. Disease cured. Sounds like science fiction? It's not. It's called <strong style="color: var(--green);">CRISPR</strong>.
+  </p>
+
+  <!-- The "Would You Rather" Interactive -->
+  <div class="fade-in d3">
+    <div class="card" style="max-width: 640px; margin: 0 auto; text-align: center; border-top: 3px solid var(--red);">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: var(--font-mono);">Thought Experiment</p>
+      <p style="font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 20px; line-height: 1.4;">
+        Would You Rather...
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div id="wyr-opt1" onclick="wyrVote(1)" style="cursor: pointer; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 14px; padding: 20px 14px; transition: all 0.3s ease;">
+          <div style="font-size: 36px; margin-bottom: 8px;">&#x1F9EC;</div>
+          <div style="font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 4px;">Edit out a disease gene</div>
+          <div style="font-size: 11px; color: var(--text-muted);">from your family forever</div>
+          <div id="wyr-pct1" style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--green); margin-top: 10px; display: none;"></div>
+        </div>
+        <div id="wyr-opt2" onclick="wyrVote(2)" style="cursor: pointer; background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15); border-radius: 14px; padding: 20px 14px; transition: all 0.3s ease;">
+          <div style="font-size: 36px; margin-bottom: 8px;">&#x1F6D1;</div>
+          <div style="font-size: 14px; font-weight: 600; color: var(--indigo); margin-bottom: 4px;">Keep DNA exactly as it is</div>
+          <div style="font-size: 11px; color: var(--text-muted);">nature knows best</div>
+          <div id="wyr-pct2" style="font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--indigo); margin-top: 10px; display: none;"></div>
+        </div>
+      </div>
+      <p id="wyr-result" style="font-size: 13px; color: var(--text-muted); min-height: 20px;"></p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Mind-blowing hook statements -->
+  <div class="fade-in d4">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+      <div class="card" style="text-align: center; border-left: 3px solid var(--amber);">
+        <div style="font-size: 32px; margin-bottom: 10px;">&#x1F4DD;</div>
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+          <strong style="color: var(--amber);">One single typo</strong> in your 3.2 billion-letter DNA can cause Sickle Cell Disease, Cystic Fibrosis, or Huntington's. Just. One. Letter.
+        </p>
+      </div>
+      <div class="card" style="text-align: center; border-left: 3px solid var(--cyan);">
+        <div style="font-size: 32px; margin-bottom: 10px;">&#x23F1;</div>
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+          <strong style="color: var(--cyan);">In 2023</strong>, the first CRISPR cure was approved. A patient with Sickle Cell Disease was <em>cured</em> &mdash; not treated, <em>cured</em> &mdash; by fixing that one letter.
+        </p>
+      </div>
+      <div class="card" style="text-align: center; border-left: 3px solid var(--pink);">
+        <div style="font-size: 32px; margin-bottom: 10px;">&#x1F916;</div>
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.7;">
+          <strong style="color: var(--pink);">Now add AI</strong>. An undergrad with zero experience used CRISPR-GPT to edit genes successfully on their <em>first try</em>. Something that takes PhD students months.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- The "Guess" icebreaker -->
+  <div class="fade-in">
+    <div class="card" style="max-width: 580px; margin: 0 auto; text-align: center; background: rgba(245,158,11,0.04); border: 1px solid rgba(245,158,11,0.12);">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: var(--font-mono);">Quick Icebreaker</p>
+      <p style="font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 16px; line-height: 1.4; color: var(--amber);">
+        How many genetic "typos" do you think YOU carry right now?
+      </p>
+      <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;" id="icebreaker-opts">
+        <div onclick="iceReveal(this, false)" style="cursor: pointer; padding: 10px 20px; border-radius: 10px; background: rgba(245,230,211,0.04); border: 1px solid rgba(245,230,211,0.1); font-size: 14px; color: var(--text-muted); transition: all 0.3s;">About 5</div>
+        <div onclick="iceReveal(this, false)" style="cursor: pointer; padding: 10px 20px; border-radius: 10px; background: rgba(245,230,211,0.04); border: 1px solid rgba(245,230,211,0.1); font-size: 14px; color: var(--text-muted); transition: all 0.3s;">About 50</div>
+        <div onclick="iceReveal(this, false)" style="cursor: pointer; padding: 10px 20px; border-radius: 10px; background: rgba(245,230,211,0.04); border: 1px solid rgba(245,230,211,0.1); font-size: 14px; color: var(--text-muted); transition: all 0.3s;">About 400</div>
+        <div onclick="iceReveal(this, true)" style="cursor: pointer; padding: 10px 20px; border-radius: 10px; background: rgba(245,230,211,0.04); border: 1px solid rgba(245,230,211,0.1); font-size: 14px; color: var(--text-muted); transition: all 0.3s;">~6 Million!</div>
+      </div>
+      <p id="ice-answer" style="font-size: 13px; color: var(--text-muted); margin-top: 14px; line-height: 1.6; min-height: 20px;"></p>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════ SECTION 0: DNA 101 ═══════════════════════════ -->
 <section id="sec-dna101" class="container">
   <div class="fade-in">
@@ -1121,6 +1202,133 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════ SECTION: THE FOUNDERS ═══════════════════════════ -->
+<section id="sec-founders" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(236,72,153,0.3); background: rgba(236,72,153,0.06); color: var(--pink);">The Origin Story</div>
+  </div>
+  <h2 class="section-title fade-in d1">The Scientists Who <em>Hacked Life</em></h2>
+  <p class="section-subtitle fade-in d2">
+    CRISPR wasn't invented in a single eureka moment. It was discovered in <strong style="color: var(--text-primary);">bacteria</strong> &mdash; nature's oldest immune system &mdash; and then turned into the most powerful biological tool ever created. Here's how it happened.
+  </p>
+
+  <!-- Founders image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=920&q=80" alt="Scientists in a research laboratory" />
+      <div class="section-img-caption">From yogurt bacteria to Nobel Prize &mdash; the unlikely origins of CRISPR</div>
+    </div>
+  </div>
+
+  <!-- The Discovery Timeline -->
+  <div class="fade-in d3">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 500;">The Discovery Timeline</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--amber);"></div>
+        <div class="tl-year" style="color: var(--amber);">1987 &mdash; The Accidental Discovery</div>
+        <div class="tl-event"><strong>Yoshizumi Ishino</strong> (Japan) noticed weird repeating patterns in E. coli DNA while studying something else entirely. He had no idea what they were. He published it and moved on. Those "weird patterns" were CRISPR.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--cyan);"></div>
+        <div class="tl-year" style="color: var(--cyan);">2007 &mdash; The Yogurt Connection</div>
+        <div class="tl-event"><strong>Philippe Horvath</strong> at Danisco (a yogurt company!) discovered that bacteria use CRISPR as an <em>immune system</em> &mdash; they store snippets of virus DNA to recognize and destroy future attacks. Yes, the biggest biotech breakthrough started with yogurt.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--green);"></div>
+        <div class="tl-year" style="color: var(--green);">2012 &mdash; The Game-Changer Paper</div>
+        <div class="tl-event"><strong>Jennifer Doudna</strong> (UC Berkeley) &amp; <strong>Emmanuelle Charpentier</strong> (then at Ume&aring; University, Sweden) published the landmark paper showing CRISPR-Cas9 could be programmed to cut <em>any</em> DNA sequence. This was the "holy grail" moment.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--indigo);"></div>
+        <div class="tl-year" style="color: var(--indigo);">2013 &mdash; First Human Cell Editing</div>
+        <div class="tl-event"><strong>Feng Zhang</strong> (MIT/Broad Institute) &amp; <strong>Le Cong</strong> (who later built CRISPR-GPT!) were among the first to successfully use CRISPR in <em>human cells</em>. The race was on.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--pink);"></div>
+        <div class="tl-year" style="color: var(--pink);">2020 &mdash; Nobel Prize in Chemistry</div>
+        <div class="tl-event"><strong>Doudna &amp; Charpentier</strong> won the Nobel Prize &mdash; just 8 years after their paper. The fastest Nobel for a biological tool in modern history. Two women winning Chemistry's top prize was also a historic first.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Founder Cards -->
+  <div class="fade-in d4">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 500;">The Key Figures</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+      <div class="card" style="text-align: center; border-top: 3px solid var(--green);">
+        <div style="font-size: 42px; margin-bottom: 8px;">&#x1F469;&#x200D;&#x1F52C;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--green); margin-bottom: 4px;">Jennifer Doudna</div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6;">UC Berkeley. Co-inventor of CRISPR-Cas9. Nobel Laureate 2020. Founded multiple biotech companies including Mammoth Biosciences.</div>
+      </div>
+      <div class="card" style="text-align: center; border-top: 3px solid var(--cyan);">
+        <div style="font-size: 42px; margin-bottom: 8px;">&#x1F469;&#x200D;&#x1F52C;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--cyan); margin-bottom: 4px;">Emmanuelle Charpentier</div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6;">Max Planck Institute, Berlin. Co-inventor. Nobel Laureate 2020. Founded CRISPR Therapeutics &mdash; which made the first FDA-approved cure.</div>
+      </div>
+      <div class="card" style="text-align: center; border-top: 3px solid var(--indigo);">
+        <div style="font-size: 42px; margin-bottom: 8px;">&#x1F468;&#x200D;&#x1F52C;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--indigo); margin-bottom: 4px;">Feng Zhang</div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6;">MIT / Broad Institute. First to use CRISPR in human cells. Co-founded Editas Medicine. Youngest full professor at MIT's history in his field.</div>
+      </div>
+      <div class="card" style="text-align: center; border-top: 3px solid var(--purple);">
+        <div style="font-size: 42px; margin-bottom: 8px;">&#x1F468;&#x200D;&#x1F52C;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--purple); margin-bottom: 4px;">Le Cong</div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6;">Stanford. Was Feng Zhang's student during the first human cell edits. Later built <strong>CRISPR-GPT</strong> &mdash; connecting his CRISPR roots with AI.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Fun bacteria analogy -->
+  <div class="fade-in">
+    <div class="quote-box" style="background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(245,158,11,0.08)); border-color: rgba(236,72,153,0.15);">
+      <div class="quote-text">"Bacteria have been doing CRISPR for billions of years. We just figured out how to steal their homework."</div>
+      <div class="quote-attr">The Most Elegant Theft in Scientific History</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- How bacteria use CRISPR - visual -->
+  <div class="fade-in d1">
+    <div class="card" style="max-width: 640px; margin: 0 auto; text-align: center;">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: var(--font-mono);">How Bacteria Use CRISPR Naturally</p>
+      <div class="analogy-strip">
+        <div class="analogy-box" style="background: rgba(232,68,58,0.08); border: 1px solid rgba(232,68,58,0.15);">
+          <div class="analogy-emoji">&#x1F9A0;</div>
+          <div class="analogy-label" style="color: var(--red);">Virus Attacks</div>
+          <div class="analogy-sub">Injects its DNA</div>
+        </div>
+        <div class="analogy-arrow">&#x27A1;</div>
+        <div class="analogy-box" style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15);">
+          <div class="analogy-emoji">&#x1F4F8;</div>
+          <div class="analogy-label" style="color: var(--amber);">Bacteria Saves</div>
+          <div class="analogy-sub">Stores a "mugshot"</div>
+        </div>
+        <div class="analogy-arrow">&#x27A1;</div>
+        <div class="analogy-box" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.15);">
+          <div class="analogy-emoji">&#x1F50D;</div>
+          <div class="analogy-label" style="color: var(--green);">Next Time</div>
+          <div class="analogy-sub">Recognizes &amp; destroys</div>
+        </div>
+        <div class="analogy-arrow">&#x27A1;</div>
+        <div class="analogy-box" style="background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.15);">
+          <div class="analogy-emoji">&#x2702;&#xFE0F;</div>
+          <div class="analogy-label" style="color: var(--cyan);">Cas9 Cuts</div>
+          <div class="analogy-sub">Slices virus DNA</div>
+        </div>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-top: 12px; max-width: 520px; margin-left: auto; margin-right: auto;">
+        Scientists realized: if we give Cas9 a <strong style="color: var(--green);">custom "mugshot"</strong> (called a guide RNA), it will cut <em>any</em> DNA we want. That's the entire trick. It's like giving a heat-seeking missile new GPS coordinates.
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════ SECTION 1: CRISPR 101 ═══════════════════════════ -->
 <section id="sec-crispr101" class="container">
   <div class="fade-in">
@@ -1166,6 +1374,438 @@
       <div class="step-icon">&#x1F50D;</div>
       <div class="step-title">Verify Results</div>
       <div class="step-desc">Sequencing data analysis, off-target detection, efficiency measurement. This alone can take weeks of specialized bioinformatics work.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION: DISEASES CRISPR SOLVES ═══════════════════════════ -->
+<section id="sec-diseases" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(232,68,58,0.3); background: rgba(232,68,58,0.06); color: var(--red);">Real-World Impact</div>
+  </div>
+  <h2 class="section-title fade-in d1">Diseases CRISPR is <em>Already Curing</em></h2>
+  <p class="section-subtitle fade-in d2">
+    These aren't lab experiments anymore. CRISPR is treating real patients with real diseases. Here are 5 examples that show how a tiny DNA edit can change &mdash; or save &mdash; a life.
+  </p>
+
+  <!-- Disease image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=920&q=80" alt="Medical research and patient care" />
+      <div class="section-img-caption">From lab bench to bedside &mdash; CRISPR therapies are reaching patients</div>
+    </div>
+  </div>
+
+  <!-- Disease 1: Sickle Cell -->
+  <div class="fade-in d3">
+    <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--red);">
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 42px; flex-shrink: 0;">&#x1FA78;</div>
+        <div>
+          <div style="font-weight: 700; font-size: 17px; color: var(--red); margin-bottom: 6px;">1. Sickle Cell Disease &mdash; The First CRISPR Cure</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The Problem:</strong> A single letter change (A&rarr;T) in the HBB gene causes hemoglobin proteins to fold incorrectly, making red blood cells curve into a "sickle" shape. These block blood vessels, causing extreme pain, organ damage, and early death.
+          </p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The CRISPR Fix:</strong> <strong style="color: var(--green);">Casgevy</strong> (by Vertex &amp; CRISPR Therapeutics) takes a patient's stem cells, uses CRISPR to activate fetal hemoglobin production (which doesn't sickle), and puts them back.
+          </p>
+          <div style="display: inline-flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--green);">FDA Approved Dec 2023</span>
+            <span style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--amber);">Cost: ~$2.2 Million</span>
+            <span style="background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--cyan);">One-Time Cure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disease 2: Cancer -->
+  <div class="fade-in d3">
+    <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--indigo);">
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 42px; flex-shrink: 0;">&#x1F9AC;</div>
+        <div>
+          <div style="font-weight: 700; font-size: 17px; color: var(--indigo); margin-bottom: 6px;">2. Cancer &mdash; Supercharging Immune Cells (CAR-T)</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The Problem:</strong> Cancer cells hide from your immune system by displaying "don't attack me" signals. Your T-cells (immune soldiers) get fooled and ignore tumors.
+          </p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The CRISPR Fix:</strong> Doctors take your T-cells out, use CRISPR to remove the "off switch" (PD-1 gene) and add a cancer-targeting receptor, then inject them back. Your immune cells become <em>cancer-hunting super soldiers</em>.
+          </p>
+          <div style="display: inline-flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--indigo);">Clinical Trials Active</span>
+            <span style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--green);">Leukemia, Lymphoma, Lung Cancer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disease 3: Hereditary Blindness -->
+  <div class="fade-in d3">
+    <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--cyan);">
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 42px; flex-shrink: 0;">&#x1F441;</div>
+        <div>
+          <div style="font-weight: 700; font-size: 17px; color: var(--cyan); margin-bottom: 6px;">3. Hereditary Blindness &mdash; Sight Restored</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The Problem:</strong> <strong>Leber Congenital Amaurosis (LCA)</strong> is caused by a mutation in the CEP290 gene. Children slowly lose vision and go blind. There was no treatment.
+          </p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The CRISPR Fix:</strong> Editas Medicine's <strong style="color: var(--cyan);">EDIT-101</strong> was the first CRISPR therapy injected <em>directly into a patient's body</em> (into the eye). It edits the broken gene in retinal cells. Patients reported seeing light for the first time.
+          </p>
+          <div style="display: inline-flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--cyan);">First In-Body CRISPR Edit</span>
+            <span style="background: rgba(236,72,153,0.1); border: 1px solid rgba(236,72,153,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--pink);">Historic Milestone 2020</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disease 4: Heart Disease -->
+  <div class="fade-in d3">
+    <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--pink);">
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 42px; flex-shrink: 0;">&#x2764;&#xFE0F;</div>
+        <div>
+          <div style="font-weight: 700; font-size: 17px; color: var(--pink); margin-bottom: 6px;">4. High Cholesterol &mdash; One Shot to Save Your Heart</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The Problem:</strong> The PCSK9 gene makes your liver produce too much "bad" cholesterol (LDL). This leads to heart attacks &mdash; the #1 killer worldwide. Current treatment: daily pills for life.
+          </p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The CRISPR Fix:</strong> <strong style="color: var(--pink);">Verve Therapeutics</strong> developed a single injection that uses base editing (a precise CRISPR variant) to turn off the PCSK9 gene in liver cells. One shot &rarr; cholesterol drops permanently &rarr; no more daily pills.
+          </p>
+          <div style="display: inline-flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(236,72,153,0.1); border: 1px solid rgba(236,72,153,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--pink);">Human Trials 2023-24</span>
+            <span style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--amber);">Could Replace Daily Statins</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disease 5: HIV -->
+  <div class="fade-in d3">
+    <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--green);">
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 42px; flex-shrink: 0;">&#x1F9A0;</div>
+        <div>
+          <div style="font-weight: 700; font-size: 17px; color: var(--green); margin-bottom: 6px;">5. HIV &mdash; Making Cells Virus-Proof</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The Problem:</strong> HIV enters cells through a "door" called the CCR5 receptor. About 1% of Northern Europeans naturally lack this door (a mutation called CCR5-delta32) and are <em>immune to HIV</em>.
+          </p>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px;">
+            <strong style="color: var(--text-primary);">The CRISPR Fix:</strong> Scientists use CRISPR to disable the CCR5 gene in patients' immune cells &mdash; essentially giving everyone that natural immunity. Excision BioTherapeutics is also working on cutting HIV DNA directly out of infected cells.
+          </p>
+          <div style="display: inline-flex; gap: 8px; flex-wrap: wrap;">
+            <span style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--green);">Multiple Clinical Trials</span>
+            <span style="background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--purple);">Goal: Functional Cure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Disease Progress Bars -->
+  <div class="fade-in">
+    <p style="font-size: 12px; color: rgba(245,230,211,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; font-weight: 500;">CRISPR Clinical Pipeline &mdash; Diseases Under Active Treatment</p>
+    <div class="disease-bars" id="diseaseBars">
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--red);">Sickle Cell</div>
+        <div class="bar-track"><div class="bar-fill" data-width="100" style="background: linear-gradient(90deg, var(--red), var(--green));">FDA Approved!</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--indigo);">Blood Cancers</div>
+        <div class="bar-track"><div class="bar-fill" data-width="75" style="background: linear-gradient(90deg, var(--indigo), var(--cyan));">Phase III</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--cyan);">Blindness (LCA)</div>
+        <div class="bar-track"><div class="bar-fill" data-width="55" style="background: linear-gradient(90deg, var(--cyan), var(--green));">Phase II</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--pink);">Heart Disease</div>
+        <div class="bar-track"><div class="bar-fill" data-width="45" style="background: linear-gradient(90deg, var(--pink), var(--purple));">Phase I</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--green);">HIV</div>
+        <div class="bar-track"><div class="bar-fill" data-width="40" style="background: linear-gradient(90deg, var(--green), var(--amber));">Phase I</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--amber);">Muscular Dystrophy</div>
+        <div class="bar-track"><div class="bar-fill" data-width="35" style="background: linear-gradient(90deg, var(--amber), var(--red));">Preclinical</div></div>
+      </div>
+      <div class="disease-row">
+        <div class="disease-name" style="color: var(--purple);">Alzheimer's</div>
+        <div class="bar-track"><div class="bar-fill" data-width="20" style="background: linear-gradient(90deg, var(--purple), var(--pink));">Early Research</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Interactive: Guess the mutation -->
+  <div class="fade-in d1">
+    <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center; background: rgba(232,68,58,0.04); border: 1px solid rgba(232,68,58,0.12);">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: var(--font-mono);">Interactive &mdash; Spot the Mutation!</p>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">Sickle Cell is caused by ONE letter change. Can you spot it?</p>
+      <div style="font-family: var(--font-mono); font-size: 16px; letter-spacing: 2px; margin-bottom: 8px;">
+        <span style="color: rgba(245,230,211,0.3);">Normal: </span>
+        <span style="color: var(--green);">G</span><span style="color: var(--amber);">A</span><span style="color: var(--green);">G</span>
+        <span style="color: rgba(245,230,211,0.15);"> &rarr; Glutamic Acid (normal hemoglobin)</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 16px; letter-spacing: 2px; margin-bottom: 16px;">
+        <span style="color: rgba(245,230,211,0.3);">Sickle:&nbsp;&nbsp; </span>
+        <span style="color: var(--green);">G</span><span id="sickle-mutation" style="color: var(--red); cursor: pointer; background: rgba(232,68,58,0.2); padding: 2px 6px; border-radius: 4px; font-weight: 700; animation: glowPulse 2s infinite;" onclick="document.getElementById('mutation-explain').style.display='block'">T</span><span style="color: var(--green);">G</span>
+        <span style="color: rgba(245,230,211,0.15);"> &rarr; Valine (sickle hemoglobin)</span>
+      </div>
+      <p id="mutation-explain" style="display: none; font-size: 13px; color: var(--amber); line-height: 1.7; margin-top: 8px; transition: all 0.3s;">
+        That single <strong>A&rarr;T</strong> change makes hemoglobin fold wrong, turning round red blood cells into crescent "sickles." This one typo affects ~20 million people worldwide. CRISPR can fix it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION: FUTURE OF CRISPR ═══════════════════════════ -->
+<section id="sec-future" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.06); color: var(--purple);">What's Coming Next</div>
+  </div>
+  <h2 class="section-title fade-in d1">The <em>Wild</em> Future of CRISPR</h2>
+  <p class="section-subtitle fade-in d2">
+    Scientists aren't just thinking about curing diseases anymore. CRISPR opens doors that sound like science fiction &mdash; except they're already being researched. Buckle up.
+  </p>
+
+  <!-- Future image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=920&q=80" alt="Futuristic DNA and genetics concept" />
+      <div class="section-img-caption">The next decade of CRISPR could reshape what it means to be human</div>
+    </div>
+  </div>
+
+  <div class="fade-in d3">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+      <!-- Designer Babies -->
+      <div class="card" style="border-top: 3px solid var(--pink);">
+        <div style="font-size: 36px; margin-bottom: 10px;">&#x1F476;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--pink); margin-bottom: 6px;">Designer Babies</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          In 2018, Chinese scientist He Jiankui shocked the world by creating the first gene-edited babies (editing CCR5 for HIV resistance). He went to prison. But the question remains: <em>should</em> parents choose eye color, intelligence, or athletic ability? The technology exists. The ethics don't have answers yet.
+        </div>
+      </div>
+
+      <!-- De-extinction -->
+      <div class="card" style="border-top: 3px solid var(--amber);">
+        <div style="font-size: 36px; margin-bottom: 10px;">&#x1F9A3;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--amber); margin-bottom: 6px;">De-Extinction: Bringing Back the Mammoth</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>Colossal Biosciences</strong> is using CRISPR to insert woolly mammoth genes into Asian elephant DNA. Goal: create cold-resistant elephants by 2028. They're also working on the Dodo bird and Tasmanian Tiger. Jurassic Park vibes, but real.
+        </div>
+      </div>
+
+      <!-- Aging -->
+      <div class="card" style="border-top: 3px solid var(--green);">
+        <div style="font-size: 36px; margin-bottom: 10px;">&#x23F3;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--green); margin-bottom: 6px;">Reversing Aging</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          Researchers at Harvard (David Sinclair's lab) used CRISPR-based reprogramming to reverse aging in mice, restoring old mice's vision and making their cells biologically younger. Human trials for age-related blindness are being planned. Could we live to 150?
+        </div>
+      </div>
+
+      <!-- Super Crops -->
+      <div class="card" style="border-top: 3px solid var(--cyan);">
+        <div style="font-size: 36px; margin-bottom: 10px;">&#x1F33E;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--cyan); margin-bottom: 6px;">Climate-Proof Super Crops</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          CRISPR-edited rice that needs 40% less water. Wheat resistant to fungal diseases. Tomatoes with 5x more vitamin D. Bananas immune to the TR4 fungus threatening global supply. Unlike old GMOs, CRISPR edits are precise &mdash; no foreign DNA inserted.
+        </div>
+      </div>
+
+      <!-- Pig Organs -->
+      <div class="card" style="border-top: 3px solid var(--indigo);">
+        <div style="font-size: 36px; margin-bottom: 10px;">&#x1F416;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--indigo); margin-bottom: 6px;">Pig-to-Human Organ Transplants</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>eGenesis</strong> uses CRISPR to edit 69+ genes in pigs, removing pig viruses and adding human-compatible genes. In 2024, a patient received a CRISPR-edited pig kidney and lived for over 2 months. 100,000+ people die yearly waiting for organs. This could end the shortage.
+        </div>
+      </div>
+
+      <!-- Disease Eradication -->
+      <div class="card" style="border-top: 3px solid var(--red);">
+        <div style="font-size: 36px; margin-bottom: 10px;">&#x1F99F;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--red); margin-bottom: 6px;">Gene Drives: Eliminating Malaria</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          CRISPR "gene drives" can spread a genetic change through an entire species. Scientists are engineering mosquitoes that can't carry malaria. Release them, and within generations, malaria-carrying mosquitoes could go extinct. Malaria kills 600,000+ people/year, mostly children.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Interactive: Would you do it? Poll -->
+  <div class="fade-in d4">
+    <div class="card" style="max-width: 620px; margin: 0 auto; text-align: center; background: rgba(139,92,246,0.04); border: 1px solid rgba(139,92,246,0.12);">
+      <p style="font-size: 11px; color: rgba(245,230,211,0.25); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: var(--font-mono);">Class Discussion</p>
+      <p style="font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 20px; line-height: 1.4; color: var(--purple);">
+        Which future CRISPR use excites you the most?
+      </p>
+      <div id="future-poll" style="display: flex; flex-direction: column; gap: 8px;">
+        <div onclick="futurePollVote(this, 28)" class="future-poll-opt" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(245,230,211,0.03); border: 1px solid rgba(245,230,211,0.08); transition: all 0.3s;">
+          <span style="font-size: 20px;">&#x1F489;</span>
+          <span style="font-size: 13px; color: var(--text-muted); flex: 1;">Curing all genetic diseases</span>
+          <span class="poll-bar" style="display: none; font-family: var(--font-mono); font-size: 12px; color: var(--green);"></span>
+        </div>
+        <div onclick="futurePollVote(this, 22)" class="future-poll-opt" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(245,230,211,0.03); border: 1px solid rgba(245,230,211,0.08); transition: all 0.3s;">
+          <span style="font-size: 20px;">&#x1F9A3;</span>
+          <span style="font-size: 13px; color: var(--text-muted); flex: 1;">Bringing back extinct animals</span>
+          <span class="poll-bar" style="display: none; font-family: var(--font-mono); font-size: 12px; color: var(--amber);"></span>
+        </div>
+        <div onclick="futurePollVote(this, 18)" class="future-poll-opt" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(245,230,211,0.03); border: 1px solid rgba(245,230,211,0.08); transition: all 0.3s;">
+          <span style="font-size: 20px;">&#x23F3;</span>
+          <span style="font-size: 13px; color: var(--text-muted); flex: 1;">Reversing aging &amp; living to 150</span>
+          <span class="poll-bar" style="display: none; font-family: var(--font-mono); font-size: 12px; color: var(--cyan);"></span>
+        </div>
+        <div onclick="futurePollVote(this, 20)" class="future-poll-opt" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(245,230,211,0.03); border: 1px solid rgba(245,230,211,0.08); transition: all 0.3s;">
+          <span style="font-size: 20px;">&#x1F99F;</span>
+          <span style="font-size: 13px; color: var(--text-muted); flex: 1;">Eliminating malaria forever</span>
+          <span class="poll-bar" style="display: none; font-family: var(--font-mono); font-size: 12px; color: var(--pink);"></span>
+        </div>
+        <div onclick="futurePollVote(this, 12)" class="future-poll-opt" style="cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(245,230,211,0.03); border: 1px solid rgba(245,230,211,0.08); transition: all 0.3s;">
+          <span style="font-size: 20px;">&#x1F476;</span>
+          <span style="font-size: 13px; color: var(--text-muted); flex: 1;">Designing your children's traits</span>
+          <span class="poll-bar" style="display: none; font-family: var(--font-mono); font-size: 12px; color: var(--purple);"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION: AI + CRISPR ═══════════════════════════ -->
+<section id="sec-ai-crispr" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(6,182,212,0.3); background: rgba(6,182,212,0.06); color: var(--cyan);">The Power Combo</div>
+  </div>
+  <h2 class="section-title fade-in d1">AI + CRISPR = <em>Superpowers</em></h2>
+  <p class="section-subtitle fade-in d2">
+    CRISPR gives us the scissors. AI gives us the intelligence to know exactly where, when, and how to cut. Together, they solve problems neither could alone.
+  </p>
+
+  <!-- AI + Bio image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=920&q=80" alt="Artificial intelligence neural network visualization" />
+      <div class="section-img-caption">AI is becoming biology's most powerful thinking partner</div>
+    </div>
+  </div>
+
+  <div class="fade-in d3">
+    <div class="steps-grid">
+      <div class="step-card" style="border-top: 3px solid var(--green);">
+        <div class="step-number">AI</div>
+        <div class="step-icon">&#x1F3AF;</div>
+        <div class="step-title">Predicting Off-Targets</div>
+        <div class="step-desc">CRISPR sometimes cuts wrong spots. AI models like DeepCRISPR analyze the entire genome to predict where accidental cuts might happen &mdash; before you even pick up the scissors.</div>
+      </div>
+      <div class="step-card" style="border-top: 3px solid var(--cyan);">
+        <div class="step-number">AI</div>
+        <div class="step-icon">&#x1F9EC;</div>
+        <div class="step-title">Designing Better Guides</div>
+        <div class="step-desc">AI scans millions of possible guide RNA sequences and picks the one most likely to work. What took a PhD student weeks, AI does in seconds &mdash; and more accurately.</div>
+      </div>
+      <div class="step-card" style="border-top: 3px solid var(--purple);">
+        <div class="step-number">AI</div>
+        <div class="step-icon">&#x1F48A;</div>
+        <div class="step-title">Drug Discovery</div>
+        <div class="step-desc">AI identifies disease-causing genes 100x faster. AlphaFold predicts protein structures. Together with CRISPR, we can find targets AND edit them in record time.</div>
+      </div>
+      <div class="step-card" style="border-top: 3px solid var(--amber);">
+        <div class="step-number">AI</div>
+        <div class="step-icon">&#x1F9D1;&#x200D;&#x2695;&#xFE0F;</div>
+        <div class="step-title">Personalized Medicine</div>
+        <div class="step-desc">AI reads YOUR genome, identifies YOUR specific mutations, and designs a CRISPR therapy tailored to YOUR DNA. Medicine stops being one-size-fits-all.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="fade-in d4">
+    <div class="quote-box" style="background: linear-gradient(135deg, rgba(6,182,212,0.08), rgba(99,102,241,0.08)); border-color: rgba(6,182,212,0.15);">
+      <div class="quote-text">"CRISPR without AI is like having a scalpel but no X-ray. You can cut, but you're guessing where. AI gives CRISPR eyes."</div>
+      <div class="quote-attr">Why These Two Technologies Need Each Other</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION: LEADING COUNTRIES ═══════════════════════════ -->
+<section id="sec-countries" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(245,158,11,0.3); background: rgba(245,158,11,0.06); color: var(--amber);">Global Race</div>
+  </div>
+  <h2 class="section-title fade-in d1">The <em>Global CRISPR + AI</em> Race</h2>
+  <p class="section-subtitle fade-in d2">
+    This isn't just a lab project. Countries are pouring billions into CRISPR and AI for healthcare, treating it as a matter of national importance.
+  </p>
+
+  <div class="fade-in d3">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+      <!-- USA -->
+      <div class="card" style="border-top: 3px solid var(--indigo);">
+        <div style="font-size: 36px; margin-bottom: 8px;">&#x1F1FA;&#x1F1F8;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--indigo); margin-bottom: 6px;">United States</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>Global leader.</strong> Home to Stanford (CRISPR-GPT), Broad Institute (Feng Zhang), UC Berkeley (Doudna). FDA approved the first CRISPR cure. NIH funding: $2B+/year for gene therapy. Also leads in AI with OpenAI, Google DeepMind, Anthropic.
+        </div>
+      </div>
+
+      <!-- China -->
+      <div class="card" style="border-top: 3px solid var(--red);">
+        <div style="font-size: 36px; margin-bottom: 8px;">&#x1F1E8;&#x1F1F3;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--red); margin-bottom: 6px;">China</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>Most aggressive.</strong> First to use CRISPR in humans (2016 cancer trial). He Jiankui's gene-edited babies (controversial). Over 50+ clinical trials. Massive state investment in AI for healthcare. BGI Genomics is world's largest genome center.
+        </div>
+      </div>
+
+      <!-- UK -->
+      <div class="card" style="border-top: 3px solid var(--cyan);">
+        <div style="font-size: 36px; margin-bottom: 8px;">&#x1F1EC;&#x1F1E7;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--cyan); margin-bottom: 6px;">United Kingdom</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>First to approve Casgevy</strong> (even before the US!). Home to DeepMind (AlphaFold). The Crick Institute and Wellcome Sanger Centre lead in genomics. UK Biobank has 500K genomes powering AI research.
+        </div>
+      </div>
+
+      <!-- Japan -->
+      <div class="card" style="border-top: 3px solid var(--pink);">
+        <div style="font-size: 36px; margin-bottom: 8px;">&#x1F1EF;&#x1F1F5;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--pink); margin-bottom: 6px;">Japan</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>First to sell CRISPR food</strong> &mdash; CRISPR-edited tomatoes (Sicilian Rouge) hit stores in 2021. Leading in regenerative medicine (iPS cells + CRISPR). RIKEN research institute is a powerhouse. Regulatory environment is pro-innovation.
+        </div>
+      </div>
+
+      <!-- South Korea -->
+      <div class="card" style="border-top: 3px solid var(--green);">
+        <div style="font-size: 36px; margin-bottom: 8px;">&#x1F1F0;&#x1F1F7;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--green); margin-bottom: 6px;">South Korea</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>ToolGen</strong> (Korean company) holds key CRISPR patents. Samsung investing heavily in bio+AI convergence. Strong AI talent pipeline. Government's BIO 2030 plan targets $100B bio-economy.
+        </div>
+      </div>
+
+      <!-- India -->
+      <div class="card" style="border-top: 3px solid var(--amber);">
+        <div style="font-size: 36px; margin-bottom: 8px;">&#x1F1EE;&#x1F1F3;</div>
+        <div style="font-weight: 700; font-size: 15px; color: var(--amber); margin-bottom: 6px;">India</div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">
+          <strong>Sickle Cell is a major burden</strong> &mdash; millions affected. CSIR labs and IITs actively researching affordable CRISPR therapies. India's AI talent pool is massive. Focus: making gene therapy accessible to developing world.
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1372,6 +2012,225 @@
   </div>
 </section>
 
+<!-- ═══════════════════════════ SECTION: AI IN HEALTHCARE TIMELINE ═══════════════════════════ -->
+<section id="sec-ai-timeline" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.06); color: var(--green);">The Big Picture</div>
+  </div>
+  <h2 class="section-title fade-in d1">AI in Healthcare: <em>Year by Year</em></h2>
+  <p class="section-subtitle fade-in d2">
+    AI didn't just suddenly appear in medicine. Here's the timeline of how artificial intelligence has been quietly revolutionizing healthcare &mdash; and it's accelerating fast.
+  </p>
+
+  <!-- Healthcare AI image -->
+  <div class="fade-in d2">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=920&q=80" alt="Modern healthcare technology and AI" />
+      <div class="section-img-caption">AI is transforming every corner of healthcare &mdash; from diagnosis to drug discovery to gene editing</div>
+    </div>
+  </div>
+
+  <div class="fade-in d3">
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--amber);"></div>
+        <div class="tl-year" style="color: var(--amber);">2012 &mdash; Deep Learning Arrives</div>
+        <div class="tl-event">AlexNet wins ImageNet competition. Deep learning explodes. Researchers realize: if AI can recognize cats in photos, maybe it can recognize cancer in X-rays.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--amber);"></div>
+        <div class="tl-year" style="color: var(--amber);">2016 &mdash; AI Beats Doctors at Diagnosis</div>
+        <div class="tl-event">Google's AI diagnoses diabetic retinopathy from eye scans more accurately than ophthalmologists. First major proof that AI can match expert doctors.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--green);"></div>
+        <div class="tl-year" style="color: var(--green);">2018 &mdash; First FDA-Approved AI Diagnostic</div>
+        <div class="tl-event"><strong>IDx-DR</strong> becomes the first AI system authorized to make medical diagnoses without a doctor's review. A machine can now officially tell you if you're sick.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--cyan);"></div>
+        <div class="tl-year" style="color: var(--cyan);">2020 &mdash; AlphaFold Solves Protein Folding</div>
+        <div class="tl-event">DeepMind's AlphaFold solves a 50-year-old biology problem: predicting 3D protein structures from amino acid sequences. Predicts 200M+ structures. Drug discovery will never be the same.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--cyan);"></div>
+        <div class="tl-year" style="color: var(--cyan);">2020 &mdash; COVID Accelerates Everything</div>
+        <div class="tl-event">AI helps design COVID vaccines in record time. Moderna's mRNA vaccine sequence was designed with computational tools in just 2 days. mRNA + AI = fastest vaccine in history.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--indigo);"></div>
+        <div class="tl-year" style="color: var(--indigo);">2022 &mdash; AI Drug Discovery Takes Off</div>
+        <div class="tl-event"><strong>Insilico Medicine</strong> uses AI to discover a new drug (for lung fibrosis) from scratch &mdash; in just 18 months, vs. the usual 4-5 years. Enters human trials. Total cost: fraction of traditional R&amp;D.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--purple);"></div>
+        <div class="tl-year" style="color: var(--purple);">2023 &mdash; LLMs Enter Medicine</div>
+        <div class="tl-event">Google's Med-PaLM 2 scores expert-level on medical licensing exams. GPT-4 passes USMLE. Hospitals start piloting AI assistants for clinical notes and diagnosis support.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--green);"></div>
+        <div class="tl-year" style="color: var(--green);">2023 &mdash; First CRISPR Cure Approved</div>
+        <div class="tl-event"><strong>Casgevy</strong> (CRISPR Therapeutics + Vertex) approved by UK's MHRA and then US FDA for Sickle Cell Disease. First gene-editing therapy. A new era begins.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--pink);"></div>
+        <div class="tl-year" style="color: var(--pink);">2024 &mdash; CRISPR-GPT &amp; AI Co-Pilots</div>
+        <div class="tl-event">Stanford's Le Cong lab publishes CRISPR-GPT. AI becomes a real-time lab partner. AlphaFold team wins Nobel Prize. 690+ AI medical devices now FDA-approved.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color: var(--red);"></div>
+        <div class="tl-year" style="color: var(--red);">2025&ndash;2030 &mdash; What's Coming</div>
+        <div class="tl-event">AI-designed CRISPR therapies personalized to individual patients. Fully AI-discovered drugs reaching market. AI pathologists in every hospital. Gene therapy costs dropping from $2M to under $100K. Preventive genomics becoming routine.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Key numbers -->
+  <div class="fade-in d4">
+    <div class="metrics-grid">
+      <div class="metric-card" style="border: 1px solid rgba(16,185,129,0.15);">
+        <div class="metric-value" style="color: var(--green);">950+</div>
+        <div class="metric-label">FDA-Approved AI Medical Devices</div>
+      </div>
+      <div class="metric-card" style="border: 1px solid rgba(6,182,212,0.15);">
+        <div class="metric-value" style="color: var(--cyan);">$187B</div>
+        <div class="metric-label">AI in Healthcare Market by 2030</div>
+      </div>
+      <div class="metric-card" style="border: 1px solid rgba(139,92,246,0.15);">
+        <div class="metric-value" style="color: var(--purple);">80+</div>
+        <div class="metric-label">CRISPR Clinical Trials Worldwide</div>
+      </div>
+      <div class="metric-card" style="border: 1px solid rgba(236,72,153,0.15);">
+        <div class="metric-value" style="color: var(--pink);">2 Days</div>
+        <div class="metric-label">To Design COVID Vaccine (AI)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SECTION: COMPANIES ═══════════════════════════ -->
+<section id="sec-companies" class="container">
+  <div class="fade-in">
+    <div class="section-tag" style="border: 1px solid rgba(99,102,241,0.3); background: rgba(99,102,241,0.06); color: var(--indigo);">The Players</div>
+  </div>
+  <h2 class="section-title fade-in d1">Companies <em>Building the Future</em></h2>
+  <p class="section-subtitle fade-in d2">
+    From billion-dollar biotech firms to AI startups, here are the companies at the intersection of gene editing and artificial intelligence.
+  </p>
+
+  <div class="fade-in d3">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+      <!-- CRISPR Therapeutics -->
+      <div class="card" style="border-left: 4px solid var(--green);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x2702;&#xFE0F;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--green);">CRISPR Therapeutics</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">FOUNDED BY CHARPENTIER &bull; SWITZERLAND</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Made <strong>Casgevy</strong>, the first FDA-approved CRISPR therapy. Using AI to identify new gene targets for cancer, diabetes, and rare diseases. Market cap: ~$4B.</div>
+      </div>
+
+      <!-- Editas Medicine -->
+      <div class="card" style="border-left: 4px solid var(--cyan);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x1F441;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--cyan);">Editas Medicine</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">CO-FOUNDED BY FENG ZHANG &bull; USA</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">First company to inject CRISPR directly into a patient (for blindness). Uses computational biology and AI for guide RNA optimization. Pioneering in-vivo gene editing.</div>
+      </div>
+
+      <!-- Intellia Therapeutics -->
+      <div class="card" style="border-left: 4px solid var(--indigo);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x1F9EC;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--indigo);">Intellia Therapeutics</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">CO-FOUNDED BY DOUDNA &bull; USA</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Developing one-shot CRISPR cures delivered via lipid nanoparticles (like mRNA vaccines). Treating hereditary angioedema and transthyretin amyloidosis with AI-optimized delivery systems.</div>
+      </div>
+
+      <!-- Recursion Pharmaceuticals -->
+      <div class="card" style="border-left: 4px solid var(--purple);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x1F916;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--purple);">Recursion Pharmaceuticals</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">AI-FIRST DRUG DISCOVERY &bull; USA</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Uses CRISPR to knock out genes one-by-one in cells, then photographs the results with AI to map the entire human "disease code." Has the world's largest biological image dataset (30+ petabytes).</div>
+      </div>
+
+      <!-- Insilico Medicine -->
+      <div class="card" style="border-left: 4px solid var(--amber);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x1F48A;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--amber);">Insilico Medicine</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">AI DRUG DISCOVERY &bull; HONG KONG</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Discovered a new drug for lung fibrosis entirely using AI in just 18 months (vs. 4-5 years normally). Now in Phase II clinical trials. Uses generative AI + CRISPR screening to identify drug targets.</div>
+      </div>
+
+      <!-- Verve Therapeutics -->
+      <div class="card" style="border-left: 4px solid var(--pink);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x2764;&#xFE0F;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--pink);">Verve Therapeutics</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">GENE EDITING FOR HEART DISEASE &bull; USA</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Developing a single-shot CRISPR base edit to permanently lower cholesterol. Could replace daily statin pills for 200M+ people. Uses AI to optimize delivery to liver cells.</div>
+      </div>
+
+      <!-- Colossal Biosciences -->
+      <div class="card" style="border-left: 4px solid var(--red);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x1F9A3;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--red);">Colossal Biosciences</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">DE-EXTINCTION &bull; USA</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Using CRISPR + AI to bring back the woolly mammoth, dodo bird, and Tasmanian tiger. AI compares ancient DNA to modern relatives to identify which genes to edit. Funded $225M+.</div>
+      </div>
+
+      <!-- DeepMind / Isomorphic Labs -->
+      <div class="card" style="border-left: 4px solid var(--green);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="font-size: 28px;">&#x1F9E0;</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px; color: var(--green);">DeepMind / Isomorphic Labs</div>
+            <div style="font-size: 10px; color: var(--text-faint); font-family: var(--font-mono);">AI FOR BIOLOGY &bull; GOOGLE / UK</div>
+          </div>
+        </div>
+        <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.65;">Created <strong>AlphaFold</strong> (Nobel Prize 2024) which predicted 200M+ protein structures. Now <strong>Isomorphic Labs</strong> is using this to design drugs. AlphaFold3 also predicts DNA, RNA, and drug interactions.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Fun fact -->
+  <div class="fade-in d4">
+    <div class="quote-box" style="background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.08)); border-color: rgba(99,102,241,0.15);">
+      <div class="quote-text">"The first CRISPR companies were founded by the same scientists who invented it. Doudna, Charpentier, and Zhang each started billion-dollar companies. Science + business = impact."</div>
+      <div class="quote-attr">From Lab Bench to NASDAQ</div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════ SECTION 5: MARKET ═══════════════════════════ -->
 <section id="sec-market" class="container">
   <div class="fade-in">
@@ -1553,13 +2412,98 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 setTimeout(() => document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('force-visible')), 4000);
 
+/* ─── Interactive: Would You Rather ─── */
+let wyrVoted = false;
+function wyrVote(choice) {
+  if (wyrVoted) return;
+  wyrVoted = true;
+  const opt1 = document.getElementById('wyr-opt1');
+  const opt2 = document.getElementById('wyr-opt2');
+  const pct1 = document.getElementById('wyr-pct1');
+  const pct2 = document.getElementById('wyr-pct2');
+  const result = document.getElementById('wyr-result');
+
+  // Simulated class results
+  const p1 = 73, p2 = 27;
+  pct1.textContent = p1 + '%';
+  pct2.textContent = p2 + '%';
+  pct1.style.display = 'block';
+  pct2.style.display = 'block';
+
+  if (choice === 1) {
+    opt1.style.borderColor = 'rgba(16,185,129,0.5)';
+    opt1.style.background = 'rgba(16,185,129,0.12)';
+  } else {
+    opt2.style.borderColor = 'rgba(99,102,241,0.5)';
+    opt2.style.background = 'rgba(99,102,241,0.12)';
+  }
+  opt1.style.cursor = 'default';
+  opt2.style.cursor = 'default';
+  result.innerHTML = '<span style="color: var(--green);">In real polls, ~73% of people would edit out a disease gene.</span> This is exactly the kind of question CRISPR forces us to ask. Let\'s explore why...';
+}
+
+/* ─── Interactive: Icebreaker ─── */
+let iceRevealed = false;
+function iceReveal(el, isCorrect) {
+  if (iceRevealed) return;
+  iceRevealed = true;
+  const allOpts = document.querySelectorAll('#icebreaker-opts > div');
+  allOpts.forEach(o => {
+    o.style.cursor = 'default';
+    o.style.opacity = '0.4';
+  });
+  if (isCorrect) {
+    el.style.background = 'rgba(16,185,129,0.15)';
+    el.style.borderColor = 'var(--green)';
+    el.style.color = 'var(--green)';
+  } else {
+    el.style.background = 'rgba(232,68,58,0.1)';
+    el.style.borderColor = 'var(--red)';
+    el.style.color = 'var(--red)';
+    // Highlight correct
+    allOpts[3].style.background = 'rgba(16,185,129,0.15)';
+    allOpts[3].style.borderColor = 'var(--green)';
+    allOpts[3].style.color = 'var(--green)';
+  }
+  el.style.opacity = '1';
+  allOpts[3].style.opacity = '1';
+  document.getElementById('ice-answer').innerHTML = '<span style="color: var(--amber); font-weight: 600;">~6 million mutations!</span> Every human carries about 6 million genetic differences from the "reference" genome. Most are harmless, some make you unique (eye color, height), and a tiny fraction can cause disease. CRISPR can target the harmful ones.';
+}
+
+/* ─── Interactive: Future Poll ─── */
+let futurePollVoted = false;
+function futurePollVote(el, pct) {
+  if (futurePollVoted) return;
+  futurePollVoted = true;
+  const allOpts = document.querySelectorAll('.future-poll-opt');
+  const pcts = [28, 22, 18, 20, 12];
+  allOpts.forEach((opt, i) => {
+    opt.style.cursor = 'default';
+    const bar = opt.querySelector('.poll-bar');
+    bar.style.display = 'inline';
+    bar.textContent = pcts[i] + '%';
+    if (opt === el) {
+      opt.style.borderColor = 'rgba(16,185,129,0.4)';
+      opt.style.background = 'rgba(16,185,129,0.08)';
+    }
+  });
+}
+
 /* ─── Nav dots ─── */
 const sections = [
+  { id: 'sec-opener', label: 'Start Here' },
   { id: 'sec-dna101', label: 'DNA 101' },
+  { id: 'sec-founders', label: 'Founders' },
   { id: 'sec-crispr101', label: 'CRISPR 101' },
+  { id: 'sec-diseases', label: 'Diseases' },
+  { id: 'sec-future', label: 'Future' },
+  { id: 'sec-ai-crispr', label: 'AI + CRISPR' },
+  { id: 'sec-countries', label: 'Countries' },
   { id: 'sec-bottleneck', label: 'The Problem' },
   { id: 'sec-crisprgpt', label: 'CRISPR-GPT' },
   { id: 'sec-results', label: 'Results' },
+  { id: 'sec-ai-timeline', label: 'AI Timeline' },
+  { id: 'sec-companies', label: 'Companies' },
   { id: 'sec-market', label: 'Market' },
   { id: 'sec-convergence', label: 'AI-Bio' },
   { id: 'sec-governance', label: 'Governance' },
@@ -1597,6 +2541,10 @@ const barObs = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.3 });
 document.querySelectorAll('.disease-bars').forEach(el => barObs.observe(el));
+
+/* ─── Disease bars observer (for the new diseases section) ─── */
+const diseaseBarEl = document.getElementById('diseaseBars');
+if (diseaseBarEl) barObs.observe(diseaseBarEl);
 
 /* ─── Similarity bars animation ─── */
 const simObs = new IntersectionObserver((entries) => {
@@ -1743,6 +2691,11 @@ const facts = [
   { emoji: '\uD83E\uDD16', text: 'CRISPR-GPT was built by Stanford\'s Le Cong lab \u2014 Le Cong was one of the first researchers to use CRISPR in human cells back in 2013.' },
   { emoji: '\uD83D\uDC3B', text: 'Scientists have used CRISPR to make woolly mammoth genes active in elephant cells. De-extinction might actually happen in our lifetime!' },
   { emoji: '\uD83C\uDF4C', text: 'Bananas are under threat from a fungus called TR4. CRISPR-edited bananas resistant to this disease are already being tested in field trials.' },
+  { emoji: '\uD83E\uDDA0', text: 'About 1% of Northern Europeans are naturally immune to HIV due to a gene mutation. CRISPR can give that same immunity to anyone.' },
+  { emoji: '\uD83C\uDDEF\uD83C\uDDF5', text: 'Japan was the first country to sell CRISPR-edited food \u2014 tomatoes with 5x more GABA (a calming compound) hit shelves in 2021.' },
+  { emoji: '\uD83E\uDDE0', text: 'AlphaFold predicted 200M+ protein structures in 2022. It would have taken lab scientists billions of years to do the same work experimentally.' },
+  { emoji: '\uD83D\uDC76', text: 'In 2018, He Jiankui created the first gene-edited babies in China. He was sentenced to 3 years in prison. The ethical debate still rages.' },
+  { emoji: '\uD83D\uDE80', text: 'Moderna designed the COVID vaccine sequence in just 2 DAYS using computational tools. It normally takes 10-15 years to develop a vaccine.' },
 ];
 let factIdx = 0;
 const factEmoji = document.getElementById('factEmoji');
@@ -1892,6 +2845,30 @@ const quizData = [
     opts: ['$1.2 Billion', '$7.2 Billion', '$22.4 Billion', '$50 Billion'],
     ans: 1,
     explain: '$7.2 Billion in 2024, projected to reach $22.4 Billion by 2032 \u2014 more than tripling as AI removes the expertise bottleneck.'
+  },
+  {
+    q: 'Sickle Cell Disease is caused by how many letter changes in DNA?',
+    opts: ['Hundreds of mutations', 'About 50 mutations', 'Just ONE single letter (A\u2192T)', 'An entire chromosome is missing'],
+    ans: 2,
+    explain: 'Just ONE letter! A single A\u2192T change in the HBB gene causes hemoglobin to fold incorrectly, turning round red blood cells into sickles. CRISPR fixes this.'
+  },
+  {
+    q: 'Who originally discovered the CRISPR sequences in bacteria?',
+    opts: ['Jennifer Doudna in 2012', 'Yoshizumi Ishino in 1987', 'Albert Einstein in 1945', 'Elon Musk in 2020'],
+    ans: 1,
+    explain: 'Yoshizumi Ishino noticed weird repeating patterns in E. coli DNA in 1987 while studying something else. He had no idea what they were! It took 25 more years for scientists to turn it into a gene-editing tool.'
+  },
+  {
+    q: 'Which country was the first to sell CRISPR-edited food to consumers?',
+    opts: ['United States', 'China', 'Japan', 'United Kingdom'],
+    ans: 2,
+    explain: 'Japan! CRISPR-edited tomatoes (Sicilian Rouge, with 5x more GABA) went on sale in 2021. Japan has a pro-innovation regulatory environment for gene-edited foods.'
+  },
+  {
+    q: 'What is Colossal Biosciences trying to do with CRISPR?',
+    opts: ['Cure cancer', 'Bring back woolly mammoths', 'Make humans taller', 'Build spaceships'],
+    ans: 1,
+    explain: 'Colossal is using CRISPR + AI to bring back the woolly mammoth by inserting mammoth genes into Asian elephant DNA. They\u2019re also working on the dodo bird and Tasmanian tiger!'
   },
 ];
 let quizIdx = 0, quizScore = 0, quizAnswered = new Array(quizData.length).fill(false);
